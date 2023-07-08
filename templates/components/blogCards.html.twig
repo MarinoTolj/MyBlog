@@ -1,0 +1,19 @@
+{% block body %}
+    <style>
+        .container {}
+        .blog-card {border: red solid medium; border-radius: 5px; margin-bottom: 3px;}
+        .blog-title {text-align: center;}
+        .blog-body {}
+    </style>
+    <div class="container">
+        {% for blogPost in blogPosts %}
+            <div  class="blog-card">
+                <a href="/posts/{{ blogPost.id}}" class="blog-title">
+                    {{ blogPost.title }}
+                </a>
+
+                <p class="blog-body">{{ blogPost.body }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

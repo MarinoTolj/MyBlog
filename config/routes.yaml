@@ -1,6 +1,19 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
-app_home:
-  path: /lucky/number
-  controller: App\Controller\LuckyController::number
+homePage:
+  path: /
+  controller: App\Controller\HomePageController::index
+blog_posts:
+  path: /blog/posts
+  controller: App\Controller\BlogPostsController::createBlogPost
+show_blog_post:
+  path: /posts/{id}
+  controller: App\Controller\BlogPostsController::showBlogPost
+
+registration:
+  path: /registration
+  controller: App\Controller\RegistrationController::new
+registration-post:
+  path: /registration/post
+  controller: App\Controller\RegistrationController::index
