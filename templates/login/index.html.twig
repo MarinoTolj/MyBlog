@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <style>
+        .form-container {width: fit-content;
+            margin: 20px auto 0;
+        }
+        form {display: flex; justify-content: center; flex-direction: column;}
+        input {margin-bottom: 20px;}
+    </style>
+    <div class="form-container">
+        {#        <form action="/registration" method="post">#}
+        {#                <label for="username">Username:</label>#}
+        {#                <input type="text" id="username" name="username">#}
+
+        {#                <label for="email">Email:</label>#}
+        {#                <input type="email" id="email" name="email">#}
+
+        {#                <label for="password">Password:</label>#}
+        {#                <input type="password" id="password" name="password">#}
+
+        {#                <label for="passwordConfirm">Confirm Password:</label>#}
+        {#                <input type="password" id="passwordConfirm" name="passwordConfirm">#}
+
+        {#                <button type="submit">Submit</button>#}
+        {#        </form>#}
+        {{ form(form) }}
+    </div>
+{% endblock %}

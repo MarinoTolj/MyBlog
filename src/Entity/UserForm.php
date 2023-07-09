@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
-class RegistrationForm
+use Symfony\Component\Form\AbstractType;
+
+class UserForm
 {
     protected string $username;
     protected string $email;
     protected string $password;
-    protected string $passwordConfirm;
+    protected ?string $passwordConfirm;
 
 
     /**

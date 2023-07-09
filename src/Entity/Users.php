@@ -6,9 +6,14 @@ use App\Repository\UsersRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * @method string getUserIdentifier()
+ */
 #[ORM\Entity(repositoryClass: UsersRepository::class)]
-class Users
+class Users implements PasswordAuthenticatedUserInterface, UserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -26,6 +31,9 @@ class Users
 
     #[ORM\OneToMany(mappedBy: 'userId', targetEntity: Comments::class)]
     private Collection $comments;
+
+    #[ORM\Column(length: 20)]
+    private ?string $userRoles = null;
 
     public function __construct()
     {
@@ -101,5 +109,40 @@ class Users
         }
 
         return $this;
+    }
+
+
+    public function getSalt()
+    {
+        // TODO: Implement getSalt() method.
+    }
+
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
+
+    public function __call(string $name, array $arguments)
+    {
+        // TODO: Implement @method string getUserIdentifier()
+        return $this->username;
+    }
+
+    public function getUserRoles(): ?string
+    {
+        return $this->userRoles;
+    }
+
+    public function setUserRoles(string $userRoles): static
+    {
+        $this->userRoles = $userRoles;
+
+        return $this;
+    }
+
+
+    public function getRoles()
+    {
+        return array('ROLE_USER');
     }
 }

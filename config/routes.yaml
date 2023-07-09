@@ -13,7 +13,11 @@ show_blog_post:
 
 registration:
   path: /registration
-  controller: App\Controller\RegistrationController::new
-registration-post:
-  path: /registration/post
   controller: App\Controller\RegistrationController::index
+login:
+  path: /login
+  controller: App\Controller\SecurityController::login
+logout:
+  path: /logout
+  controller: App\Controller\LogoutController::index
+

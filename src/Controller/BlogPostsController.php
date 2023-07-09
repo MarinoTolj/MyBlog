@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\BlogPosts;
+use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,8 +11,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class BlogPostsController extends AbstractController
 {
-    public function index(): Response
+    public function index(EntityManagerInterface $entityManager): Response
     {
+
         return $this->render('blog_posts/index.html.twig', [
             'controller_name' => 'BlogPostsController',
         ]);

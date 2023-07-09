@@ -9,5 +9,19 @@
 
     <header>
         <h1>MY BLOG</h1>
+        {%if app.user is not null  %}
+            <a href="{{ path("logout") }}">
+                <button>Logout</button>
+            </a>
+        {% endif %}
+        <a href="{{ path("homePage") }}">
+            <button>Home</button>
+        </a>
+        <a href="{{ path("registration") }}">
+            <button>Registration</button>
+        </a>
+        <a href="{{ path("login") }}">
+            <button>Login</button>
+        </a>
     </header>
 {% endblock %}
