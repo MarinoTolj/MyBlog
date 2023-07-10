@@ -16,12 +16,6 @@ class HomePageController extends AbstractController
         $blogPosts = $entityManager->getRepository(BlogPosts::class)->findAll();
 
 
-        if (!$blogPosts) {
-            throw $this->createNotFoundException(
-                'No blog posts found'
-            );
-        }
-
         return $this->render('homePage/index.html.twig', [
             'controller_name' => 'HomePage',
             'blogPosts'=>$blogPosts

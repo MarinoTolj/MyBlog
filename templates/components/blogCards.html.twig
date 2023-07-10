@@ -7,13 +7,13 @@
     </style>
     <div class="container">
         {% for blogPost in blogPosts %}
-            <div  class="blog-card">
                 <a href="/posts/{{ blogPost.id}}" class="blog-title">
+                <img src="{{ asset('uploads/images/' ~ blogPost.imageFilename) }}" alt="Blog post image"  class="blog-card">
                     {{ blogPost.title }}
                 </a>
 
                 <p class="blog-body">{{ blogPost.body }}</p>
-            </div>
+
         {% endfor %}
     </div>
 {% endblock %}

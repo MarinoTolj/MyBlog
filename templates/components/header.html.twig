@@ -9,19 +9,26 @@
 
     <header>
         <h1>MY BLOG</h1>
+        <a href="{{ path("homePage") }}">
+            <button>Home</button>
+        </a>
+        {% if app.user is null %}
+            <a href="{{ path("registration") }}">
+                <button>Registration</button>
+            </a>
+            <a href="{{ path("login") }}">
+                <button>Login</button>
+            </a>
+        {% endif %}
         {%if app.user is not null  %}
             <a href="{{ path("logout") }}">
                 <button>Logout</button>
             </a>
         {% endif %}
-        <a href="{{ path("homePage") }}">
-            <button>Home</button>
-        </a>
-        <a href="{{ path("registration") }}">
-            <button>Registration</button>
-        </a>
-        <a href="{{ path("login") }}">
-            <button>Login</button>
-        </a>
+        {% if app.user is not null and app.user.userRoles == 'ADMIN' %}
+            <a href="{{ path("new_blog_post") }}">
+                <button>New Post</button>
+            </a>
+        {% endif %}
     </header>
 {% endblock %}

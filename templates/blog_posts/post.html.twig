@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <style>
+        .container {}
+        .blog-card {border: red solid medium; border-radius: 5px; margin-bottom: 3px;}
+        .blog-title {text-align: center;}
+        .blog-body {}
+    </style>
+    <div class="container">
+
+        <p>title: {{ title }}</p>
+        <p>body: {{ body }}</p>
+
+    </div>
+{% endblock %}

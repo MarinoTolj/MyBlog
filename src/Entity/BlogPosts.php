@@ -17,6 +17,8 @@ class BlogPosts
     private ?string $title = null;
     #[ORM\Column(length: 255)]
     private ?string $body = null;
+    #[ORM\Column(length:255)]
+    private ?string $imageFilename=null;
 
     public function getId(): ?int
     {
@@ -45,5 +47,21 @@ class BlogPosts
         $this->body = $body;
 
         return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getImageFilename(): ?string
+    {
+        return $this->imageFilename;
+    }
+
+    /**
+     * @param string|null $imageFilename
+     */
+    public function setImageFilename(?string $imageFilename): void
+    {
+        $this->imageFilename = $imageFilename;
     }
 }
