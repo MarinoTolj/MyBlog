@@ -16,10 +16,9 @@ class Comments
     #[ORM\Column(length: 255)]
     private ?string $body = null;
 
-
-
-    #[ORM\Column]
-    private ?int $postId = null;
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?BlogPosts $postId = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
@@ -42,12 +41,12 @@ class Comments
         return $this;
     }
 
-    public function getPostId(): ?int
+    public function getPostId(): ?BlogPosts
     {
         return $this->postId;
     }
 
-    public function setPostId(int $postId): static
+    public function setPostId(BlogPosts $postId): static
     {
         $this->postId = $postId;
 

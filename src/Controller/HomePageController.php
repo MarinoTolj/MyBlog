@@ -17,7 +17,6 @@ class HomePageController extends AbstractController
 
 
         return $this->render('homePage/index.html.twig', [
-            'controller_name' => 'HomePage',
             'blogPosts'=>$blogPosts
         ]);
     }

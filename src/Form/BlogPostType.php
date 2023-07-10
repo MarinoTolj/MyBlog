@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\Length;
 
 
 class BlogPostType extends AbstractType
@@ -17,20 +18,10 @@ class BlogPostType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title', TextType::class)
-            ->add('body', TextareaType::class)
+            ->add('title', TextType::class, ['label'=>'Title:', 'constraints'=>[new Length(['min'=>5, 'max'=>40])]])
+            ->add('body', TextareaType::class, ['label'=>'Body:', 'constraints'=>[new Length(['min'=>5, 'max'=>500])]])
             ->add('imageFilename', FileType::class, [
                 'label' => 'Image:',
-
-                // unmapped means that this field is not associated to any entity property
-                //'mapped' => false,
-
-                // make it optional so you don't have to re-upload the PDF file
-                // every time you edit the Product details
-                'required' => false,
-
-                // unmapped fields can't define their validation using annotations
-                // in the associated entity, so you can use the PHP constraint classes
                 'constraints' => [
                     new File([
                         'maxSize' => '1024k',
@@ -41,7 +32,7 @@ class BlogPostType extends AbstractType
                             'image/x-png',
                         ],
                         'mimeTypesMessage' => 'Please upload a valid image document',
-                    ])
+                    ]),
                 ],
             ])
             ->add('save', SubmitType::class, ['label' => 'Submit'])

@@ -6,6 +6,7 @@ use App\Entity\BlogPosts;
 use App\Entity\Users;
 use App\Form\BlogPostType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -33,8 +34,7 @@ class BlogPostsController extends AbstractController
         }
 
         return $this->render('blog_posts/post.html.twig', [
-            'title'=>$blogPost->getTitle(),
-            'body'=>$blogPost->getBody(),
+            'post'=>$blogPost
         ]);
 
     }

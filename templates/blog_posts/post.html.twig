@@ -2,15 +2,24 @@
 
 {% block body %}
     <style>
-        .container {}
-        .blog-card {border: red solid medium; border-radius: 5px; margin-bottom: 3px;}
-        .blog-title {text-align: center;}
-        .blog-body {}
+        .container {display: flex;align-items: center;flex-direction: column;}
+        h2 {font-size: xxx-large;text-align: center;margin-top: 10px;color: #444444;}
+        img {border-radius: 20px; width: 400px; height: 300px;}
+        article {
+            font-size: xx-large;
+            line-height: 3rem;
+            text-align: center;
+            max-width: 800px;
+            margin-top: 20px;
+            margin-bottom: 100px;
+        }
     </style>
     <div class="container">
+        <h2>{{ post.title }}</h2>
 
-        <p>title: {{ title }}</p>
-        <p>body: {{ body }}</p>
-
+        <img src="{{ asset('uploads/images/' ~ post.imageFilename) }}" alt="Blog post image">
+        <article>
+            {{ post.body }}
+        </article>
     </div>
 {% endblock %}

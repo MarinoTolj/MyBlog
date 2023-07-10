@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\BlogPostsRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\TextType;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BlogPostsRepository::class)]
@@ -15,10 +17,13 @@ class BlogPosts
 
     #[ORM\Column(length: 255)]
     private ?string $title = null;
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type:"text", length: 65535)]
     private ?string $body = null;
     #[ORM\Column(length:255)]
     private ?string $imageFilename=null;
+
+    #[ORM\OneToMany(mappedBy: 'postId', targetEntity: Comments::class)]
+    private Collection $comments;
 
     public function getId(): ?int
     {
@@ -63,5 +68,35 @@ class BlogPosts
     public function setImageFilename(?string $imageFilename): void
     {
         $this->imageFilename = $imageFilename;
+    }
+
+    /**
+     * @return Collection<int, Comments>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comments $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setPostId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comments $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getPostId() === $this) {
+                $comment->setPostId(null);
+            }
+        }
+
+        return $this;
     }
 }

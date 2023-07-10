@@ -1,19 +1,60 @@
 {% block body %}
     <style>
-        .container {}
-        .blog-card {border: red solid medium; border-radius: 5px; margin-bottom: 3px;}
-        .blog-title {text-align: center;}
-        .blog-body {}
+        .container {
+            display: grid;
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+            column-gap: 2rem;
+            row-gap: 8rem;
+
+        }
+        @media (min-width: 768px) {
+            .container{
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (min-width: 1280px) {
+            .container{
+               grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+        a {width: 400px;}
+        img {width: 400px;height: 215px;}
+        article {
+            display: flex;
+            overflow: hidden;
+            flex-direction: column;
+            border-radius: 0.75rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            max-width: 25rem;}
+        .image-container {position: relative;object-fit: cover;}
+        .text {
+            display: flex;
+            padding: 1rem;
+            flex-direction: column;
+            height: 12rem;
+        }
+        h3 {height: 4rem;
+            font-size: 1.5rem;
+            line-height: 2rem;
+            font-weight: 700;
+            color:black;
+        }
     </style>
     <div class="container">
         {% for blogPost in blogPosts %}
-                <a href="/posts/{{ blogPost.id}}" class="blog-title">
-                <img src="{{ asset('uploads/images/' ~ blogPost.imageFilename) }}" alt="Blog post image"  class="blog-card">
-                    {{ blogPost.title }}
+                <a href="/posts/{{ blogPost.id}}" class="blog-title" style="text-decoration: none;">
+                    <article>
+                        <div class="image-container">
+                            <img src="{{ asset('uploads/images/' ~ blogPost.imageFilename) }}" alt="Blog post image"
+                                   class="blog-card">
+                        </div>
+                        <div class="text">
+                            <h3>{{ blogPost.title }}</h3>
+                        </div>
+
+                    </article>
                 </a>
-
-                <p class="blog-body">{{ blogPost.body }}</p>
-
         {% endfor %}
     </div>
 {% endblock %}
