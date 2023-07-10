@@ -9,8 +9,6 @@ class UserForm
     protected string $username;
     protected string $email;
     protected string $password;
-    protected ?string $passwordConfirm;
-
 
     /**
      * @return string
@@ -60,19 +58,4 @@ class UserForm
         $this->password = $password;
     }
 
-    /**
-     * @return string
-     */
-    public function getPasswordConfirm(): string
-    {
-        return $this->passwordConfirm;
-    }
-
-    /**
-     * @param string $passwordConfirm
-     */
-    public function setPasswordConfirm(string $passwordConfirm): void
-    {
-        $this->passwordConfirm = $passwordConfirm;
-    }
 }

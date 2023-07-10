@@ -32,8 +32,9 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\OneToMany(mappedBy: 'userId', targetEntity: Comments::class)]
     private Collection $comments;
 
-    #[ORM\Column(length: 20)]
-    private ?string $userRoles = null;
+
+    #[ORM\Column(type:"json")]
+    private $roles = [];
 
     #[ORM\ManyToMany(targetEntity: BlogPosts::class, inversedBy: 'likedByUsers')]
     private Collection $likedPosts;
@@ -132,22 +133,20 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
         return $this->username;
     }
 
-    public function getUserRoles(): ?string
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
     {
-        return $this->userRoles;
+        $roles = $this->roles;
+
+        return array_unique($roles);
     }
 
-    public function setUserRoles(string $userRoles): static
+    public function setRoles(array $roles): self
     {
-        $this->userRoles = $userRoles;
-
+        $this->roles = $roles;
         return $this;
-    }
-
-
-    public function getRoles()
-    {
-        return array('ROLE_USER');
     }
 
     /**

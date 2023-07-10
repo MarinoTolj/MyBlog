@@ -18,14 +18,16 @@
                 <button>Login</button>
             </a>
         {% endif %}
+
+        {% if app.user is not null and is_granted("ROLE_ADMIN") %}
+            <a href="{{ path("new_blog_post") }}">
+                <button>New Post</button>
+            </a>
+        {% endif %}
+
         {%if app.user is not null  %}
             <a href="{{ path("logout") }}">
                 <button>Logout</button>
-            </a>
-        {% endif %}
-        {% if app.user is not null and app.user.userRoles == 'ROLE_ADMIN' %}
-            <a href="{{ path("new_blog_post") }}">
-                <button>New Post</button>
             </a>
         {% endif %}
     </header>

@@ -53,9 +53,9 @@ class Comments
         return $this;
     }
 
-    public function getUserId(): ?Users
+    public function getUserId(): ?int
     {
-        return $this->userId;
+        return $this->userId->getId();
     }
 
     public function setUserId(?Users $userId): static

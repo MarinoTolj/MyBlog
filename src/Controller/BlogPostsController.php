@@ -14,10 +14,20 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class BlogPostsController extends AbstractController
 {
+    /**
+     * @var Security
+     */
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
     public function index(EntityManagerInterface $entityManager): Response
     {
 
@@ -35,7 +45,8 @@ class BlogPostsController extends AbstractController
         $form=$this->createForm(CommentsType::class, $newComment);
         $form->handleRequest($request);
 
-        $user = $entityManager->getRepository(Users::class)->findBy(['id'=>14])[0];
+        $user = $this->security->getUser();
+
 
         if (!$blogPost) {
             throw $this->createNotFoundException(
