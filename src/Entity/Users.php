@@ -35,9 +35,13 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\Column(length: 20)]
     private ?string $userRoles = null;
 
+    #[ORM\ManyToMany(targetEntity: BlogPosts::class, inversedBy: 'likedByUsers')]
+    private Collection $likedPosts;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->likedPosts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -144,5 +148,29 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
     public function getRoles()
     {
         return array('ROLE_USER');
+    }
+
+    /**
+     * @return Collection<int, BlogPosts>
+     */
+    public function getLikedPosts(): Collection
+    {
+        return $this->likedPosts;
+    }
+
+    public function addLikedPost(BlogPosts $likedPost): static
+    {
+        if (!$this->likedPosts->contains($likedPost)) {
+            $this->likedPosts->add($likedPost);
+        }
+
+        return $this;
+    }
+
+    public function removeLikedPost(BlogPosts $likedPost): static
+    {
+        $this->likedPosts->removeElement($likedPost);
+
+        return $this;
     }
 }

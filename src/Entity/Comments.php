@@ -13,7 +13,7 @@ class Comments
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type:"text", length: 65535)]
     private ?string $body = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]

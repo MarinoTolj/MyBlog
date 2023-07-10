@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\BlogPostsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\TextType;
 use Doctrine\ORM\Mapping as ORM;
@@ -24,6 +25,17 @@ class BlogPosts
 
     #[ORM\OneToMany(mappedBy: 'postId', targetEntity: Comments::class)]
     private Collection $comments;
+
+    #[ORM\Column(type: 'integer')]
+    private int $numOfLikes=0;
+
+    #[ORM\ManyToMany(targetEntity: Users::class, mappedBy: 'likedPosts')]
+    private Collection $likedByUsers;
+
+    public function __construct()
+    {
+        $this->likedByUsers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -95,6 +107,49 @@ class BlogPosts
             if ($comment->getPostId() === $this) {
                 $comment->setPostId(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumOfLikes(): int
+    {
+        return $this->numOfLikes;
+    }
+
+    /**
+     * @param int $numOfLikes
+     */
+    public function setNumOfLikes(int $numOfLikes): void
+    {
+        $this->numOfLikes = $numOfLikes;
+    }
+
+    /**
+     * @return Collection<int, Users>
+     */
+    public function getLikedByUsers(): Collection
+    {
+        return $this->likedByUsers;
+    }
+
+    public function addLikedByUser(Users $likedByUser): static
+    {
+        if (!$this->likedByUsers->contains($likedByUser)) {
+            $this->likedByUsers->add($likedByUser);
+            $likedByUser->addLikedPost($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLikedByUser(Users $likedByUser): static
+    {
+        if ($this->likedByUsers->removeElement($likedByUser)) {
+            $likedByUser->removeLikedPost($this);
         }
 
         return $this;

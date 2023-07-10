@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\BlogPosts;
+use App\Entity\Comments;
 use App\Entity\Users;
 use App\Form\BlogPostType;
+use App\Form\CommentsType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -23,18 +25,36 @@ class BlogPostsController extends AbstractController
             'controller_name' => 'BlogPostsController',
         ]);
     }
-    public function showBlogPost(EntityManagerInterface $entityManager, int $id): Response
+    public function showBlogPost(Request $request, EntityManagerInterface $entityManager, int $id): Response
     {
         $blogPost = $entityManager->getRepository(BlogPosts::class)->find($id);
+        $comments = $entityManager->getRepository(Comments::class)->findBy(['postId'=>$id]);
+
+        $newComment=new Comments();
+
+        $form=$this->createForm(CommentsType::class, $newComment);
+        $form->handleRequest($request);
+
+        $user = $entityManager->getRepository(Users::class)->findBy(['id'=>14])[0];
 
         if (!$blogPost) {
             throw $this->createNotFoundException(
                 'No product found for id '.$id
             );
         }
+        if($form->isSubmitted() && $form->isValid()){
+            $newComment->setPostId($blogPost);
+            $newComment->setUserId($user);
+
+            $entityManager->persist($newComment);
+            $entityManager->flush();
+        }
+
 
         return $this->render('blog_posts/post.html.twig', [
-            'post'=>$blogPost
+            'post'=>$blogPost,
+            'form'=>$form->createView(),
+            'comments'=>$comments
         ]);
 
     }
