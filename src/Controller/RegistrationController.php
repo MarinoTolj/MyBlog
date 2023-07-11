@@ -50,9 +50,9 @@ class RegistrationController extends AbstractController
                 $user->setEmail($userData->getEmail());
                 $user->setRoles(["ROLE_USER"]);
 
-//                $entityManager->persist($user);
-//
-//                $entityManager->flush();
+                $entityManager->persist($user);
+
+                $entityManager->flush();
                 return $this->redirectToRoute('login');
             //}
         }

@@ -32,9 +32,13 @@ class BlogPosts
     #[ORM\ManyToMany(targetEntity: Users::class, mappedBy: 'likedPosts')]
     private Collection $likedByUsers;
 
+    #[ORM\ManyToMany(targetEntity: Users::class, mappedBy: 'favoritePosts')]
+    private Collection $favoritedByUsers;
+
     public function __construct()
     {
         $this->likedByUsers = new ArrayCollection();
+        $this->favoritedByUsers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -150,6 +154,33 @@ class BlogPosts
     {
         if ($this->likedByUsers->removeElement($likedByUser)) {
             $likedByUser->removeLikedPost($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Users>
+     */
+    public function getFavoritedByUsers(): Collection
+    {
+        return $this->favoritedByUsers;
+    }
+
+    public function addFavoritedByUser(Users $favoritedByUser): static
+    {
+        if (!$this->favoritedByUsers->contains($favoritedByUser)) {
+            $this->favoritedByUsers->add($favoritedByUser);
+            $favoritedByUser->addFavoritePost($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavoritedByUser(Users $favoritedByUser): static
+    {
+        if ($this->favoritedByUsers->removeElement($favoritedByUser)) {
+            $favoritedByUser->removeFavoritePost($this);
         }
 
         return $this;

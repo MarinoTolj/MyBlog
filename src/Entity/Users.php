@@ -39,10 +39,14 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\ManyToMany(targetEntity: BlogPosts::class, inversedBy: 'likedByUsers')]
     private Collection $likedPosts;
 
+    #[ORM\ManyToMany(targetEntity: BlogPosts::class, inversedBy: 'favoritedByUsers')]
+    private Collection $favoritePosts;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->likedPosts = new ArrayCollection();
+        $this->favoritePosts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -169,6 +173,30 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
     public function removeLikedPost(BlogPosts $likedPost): static
     {
         $this->likedPosts->removeElement($likedPost);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, BlogPosts>
+     */
+    public function getFavoritePosts(): Collection
+    {
+        return $this->favoritePosts;
+    }
+
+    public function addFavoritePost(BlogPosts $favoritePost): static
+    {
+        if (!$this->favoritePosts->contains($favoritePost)) {
+            $this->favoritePosts->add($favoritePost);
+        }
+
+        return $this;
+    }
+
+    public function removeFavoritePost(BlogPosts $favoritePost): static
+    {
+        $this->favoritePosts->removeElement($favoritePost);
 
         return $this;
     }
