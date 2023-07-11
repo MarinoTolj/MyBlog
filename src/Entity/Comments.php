@@ -41,9 +41,9 @@ class Comments
         return $this;
     }
 
-    public function getPostId(): ?BlogPosts
+    public function getPostId(): ?int
     {
-        return $this->postId;
+        return $this->postId->getId();
     }
 
     public function setPostId(BlogPosts $postId): static

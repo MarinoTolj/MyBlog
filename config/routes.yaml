@@ -10,6 +10,17 @@ new_blog_post:
 show_blog_post:
   path: /posts/{id}
   controller: App\Controller\BlogPostsController::showBlogPost
+upvote_blog_post:
+  path: /post/{id}/upvote
+  controller: App\Controller\BlogPostsController::upvoteBlogPost
+  methods: POST
+
+user_profile:
+  path: /profile/{userId}
+  controller: App\Controller\UserController::index
+edit_user_profile:
+    path: /profile/edit/{userId}
+    controller: App\Controller\UserController::editProfile
 
 registration:
   path: /registration

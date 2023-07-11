@@ -45,8 +45,7 @@ class BlogPostsController extends AbstractController
         $form=$this->createForm(CommentsType::class, $newComment);
         $form->handleRequest($request);
 
-        $user = $this->security->getUser();
-
+        $user = $this->getUser();
 
         if (!$blogPost) {
             throw $this->createNotFoundException(
@@ -105,4 +104,19 @@ class BlogPostsController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    public function upvoteBlogPost(Request $request, EntityManagerInterface $entityManager, int $id):Response{
+
+        $blogPost = $entityManager->getRepository(BlogPosts::class)->find($id);
+        $user = $this->security->getUser();
+
+        $blogPost->setNumOfLikes($blogPost->getNumOfLikes()+1);
+        $blogPost->addLikedByUser($user);
+
+        $entityManager->persist($blogPost);
+        $entityManager->flush();
+
+       return new Response("All good");
+    }
+
 }

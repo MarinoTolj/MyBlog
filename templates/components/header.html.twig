@@ -17,6 +17,10 @@
             <a href="{{ path("login") }}">
                 <button>Login</button>
             </a>
+        {% else %}
+            <a href="{{ path("user_profile", {'userId':app.user.id}) }}">
+                <button>Profile</button>
+            </a>
         {% endif %}
 
         {% if app.user is not null and is_granted("ROLE_ADMIN") %}
