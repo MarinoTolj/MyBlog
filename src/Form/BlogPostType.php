@@ -46,7 +46,7 @@ class BlogPostType extends AbstractType
             ])
             ->add('imageFilename', FileType::class, [
                 'label' => 'Image:',
-
+                'data_class'=>null,
                 'constraints' => [
                     new File([
                         'maxSize' => '1024k',

@@ -39,6 +39,53 @@ class BlogPostsController extends AbstractController
             'controller_name' => 'BlogPostsController',
         ]);
     }
+
+    public function editBlogPost(EntityManagerInterface $entityManager, Request $request, SluggerInterface $slugger, int $id): Response
+    {
+
+        $currentBlogPost=$entityManager->getRepository(BlogPosts::class)->findBy(['id'=>$id])[0];
+
+        $editForm = $this->createForm(BlogPostType::class, $currentBlogPost, [
+            'entity_manager'=>$entityManager,
+        ]);
+
+        $editForm->handleRequest($request);
+
+        if($editForm->isSubmitted() && $editForm->isValid()) {
+            $newFilename = '';
+            $imageFile = $editForm->get("imageFilename")->getData();
+            if ($imageFile) {
+                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '_' . uniqid() . '.' . $imageFile->guessExtension();
+
+                try {
+                    $imageFile->move(
+                        $this->getParameter('images_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    var_dump($e);
+                }
+            }
+            $categories = $editForm->get("categories")->getData();
+            $currentBlogPost->setImageFilename($newFilename);
+            foreach ($categories as $key => $value) {
+                $category = $entityManager->getRepository(PostCategories::class)->findBy(['name' => $value]);
+                $currentBlogPost->addPostCategory($category[0]);
+            }
+
+            $entityManager->persist($currentBlogPost);
+            $entityManager->flush();
+        }
+
+
+        return $this->render("blog_posts/edit.html.twig", [
+            'form'=>$editForm->createView(),
+        ]);
+    }
+
+
     public function showBlogPost(Request $request, EntityManagerInterface $entityManager, int $id): Response
     {
         $blogPost = $entityManager->getRepository(BlogPosts::class)->find($id);
