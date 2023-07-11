@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\BlogPosts;
 use App\Entity\Comments;
+use App\Entity\PostCategories;
 use App\Entity\Users;
 use App\Form\BlogPostType;
 use App\Form\CommentsType;
@@ -13,9 +14,11 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use function Symfony\Component\String\b;
 
 class BlogPostsController extends AbstractController
 {
@@ -28,6 +31,7 @@ class BlogPostsController extends AbstractController
     {
         $this->security = $security;
     }
+
     public function index(EntityManagerInterface $entityManager): Response
     {
 
@@ -71,7 +75,8 @@ class BlogPostsController extends AbstractController
     public function newBlogPost(EntityManagerInterface $entityManager, Request $request, SluggerInterface $slugger): Response
     {
         $blogPost = new BlogPosts();
-        $form=$this->createForm(BlogPostType::class, $blogPost);
+
+        $form=$this->createForm(BlogPostType::class, $blogPost, ['entity_manager' => $entityManager]);
 
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
@@ -92,7 +97,12 @@ class BlogPostsController extends AbstractController
                     var_dump($e);
                 }
             }
+            $categories=$form->get("categories")->getData();
             $blogPost->setImageFilename($newFilename);
+            foreach ($categories as $key=>$value){
+                $category=$entityManager->getRepository(PostCategories::class)->findBy(['name'=>$value]);
+                $blogPost->addPostCategory($category[0]);
+            }
             $entityManager->persist($blogPost);
             $entityManager->flush();
 
@@ -117,6 +127,29 @@ class BlogPostsController extends AbstractController
         $entityManager->flush();
 
        return new Response("All good");
+    }
+    public function favoriteBlogPost(Request $request, EntityManagerInterface $entityManager, int $id):Response{
+
+        $blogPost = $entityManager->getRepository(BlogPosts::class)->find($id);
+        $user = $this->security->getUser();
+        $blogPost->addFavoritedByUser($user);
+
+        $entityManager->persist($blogPost);
+        $entityManager->flush();
+
+       return new Response("All good");
+    }
+
+    public function unfavoriteBlogPost(Request $request, EntityManagerInterface $entityManager, int $id):Response{
+
+        $blogPost = $entityManager->getRepository(BlogPosts::class)->find($id);
+        $user = $this->security->getUser();
+        $blogPost->removeFavoritedByUser($user);
+
+        $entityManager->persist($blogPost);
+        $entityManager->flush();
+
+        return new Response("All good");
     }
 
 }

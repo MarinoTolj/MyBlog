@@ -16,9 +16,13 @@ export default class extends Controller {
         blogPostId:String,
     }
     upvote(event) {
-        console.log(this.blogPostIdValue);
-
         axios.post(`/post/${this.blogPostIdValue}/upvote`);
+    }
 
+    favorite(event) {
+        axios.post(`/post/${this.blogPostIdValue}/favorite`);
+    }
+    unfavorite(event) {
+        axios.post(`/post/${this.blogPostIdValue}/unfavorite`);
     }
 }

@@ -37,9 +37,11 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
     private $roles = [];
 
     #[ORM\ManyToMany(targetEntity: BlogPosts::class, inversedBy: 'likedByUsers')]
+    #[ORM\JoinTable('users_like_posts')]
     private Collection $likedPosts;
 
     #[ORM\ManyToMany(targetEntity: BlogPosts::class, inversedBy: 'favoritedByUsers')]
+    #[ORM\JoinTable('users_favorite_posts')]
     private Collection $favoritePosts;
 
     public function __construct()

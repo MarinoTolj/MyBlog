@@ -38,6 +38,14 @@
         .likeBtn p {
             margin: 0;
         }
+        .favoriteBtn{
+            display: flex;
+            gap:5px;
+            margin: 10px;
+        }
+        .favoriteBtn p {
+            margin: 0;
+        }
     </style>
     <div class="container">
         <h2>{{ post.title }}</h2>
@@ -47,24 +55,40 @@
             {{ post.body }}
         </article>
 
-        {% if app.user is not null  %}
             <div {{ stimulus_controller('post', {
                 blogPostId:post.id
-            }) }} class="likeBtn">
-                {% if post in app.user.likedPosts%}
-                        <i class="fa-solid fa-thumbs-up"></i>
+                }) }} class="likeBtn">
+                    {% if app.user is not null%}
+                            {% if post in app.user.likedPosts %}
+                                <i class="fa-solid fa-thumbs-up"></i>
+                            {% elseif is_granted("ROLE_USER") or is_granted("ROLE_ADMIN") %}
+                                <a {{ stimulus_action('post', 'upvote', 'click') }} style="cursor: pointer;">
+                                    <i class="fa-regular fa-thumbs-up"></i>
+                                </a>
+                            {% endif %}
+                            <p>{{ post.likedByUsers|length }}</p>
+                        {% else %}
+                        <p><i class="fa-regular fa-thumbs-up"></i>{{ post.likedByUsers|length }}</p>
+                    {% endif %}
+            </div>
 
-                {% else %}
-                    <a {{ stimulus_action('post', 'upvote', 'click') }} style="cursor: pointer;">
-                        <i class="fa-regular fa-thumbs-up"></i>
+        <div {{ stimulus_controller('post', {
+            blogPostId:post.id
+        }) }} class="favoriteBtn">
+
+                {% if app.user is not null and post in app.user.favoritePosts %}
+                    <a {{ stimulus_action('post', 'unfavorite', 'click') }} style="cursor: pointer;">
+                        <i class="fa-solid fa-heart"></i>
+                    </a>
+                {% elseif is_granted("ROLE_USER") or is_granted("ROLE_ADMIN") %}
+                    <a {{ stimulus_action('post', 'favorite', 'click') }} style="cursor: pointer;">
+                        <i class="fa-regular fa-heart"></i>
                     </a>
                 {% endif %}
-                <p>{{ post.likedByUsers|length }}</p>
 
-            </div>
-            {{ form(form) }}
-        {% endif %}
+        </div>
 
+        {{ form(form) }}
 
         <div class="comments-container">
             <h3>Comments:</h3>

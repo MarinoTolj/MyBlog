@@ -40,7 +40,11 @@
             font-weight: 700;
             color:black;
         }
+        .category {border-radius: 20px; background-color: lightgray;width: fit-content; padding: 10px 20px;}
+        .categories {display: flex;gap: 10px;}
     </style>
+
+
     <div class="container">
         {% for blogPost in blogPosts %}
                 <a href="/posts/{{ blogPost.id}}" class="blog-title" style="text-decoration: none;">
@@ -51,7 +55,14 @@
                         </div>
                         <div class="text">
                             <h3>{{ blogPost.title }}</h3>
+
+                            <div class="categories">
+                                {% for cat in blogPost.postCategories %}
+                                    <p class="category">{{ cat.name }}</p>
+                                {% endfor %}
+                            </div>
                         </div>
+
 
                     </article>
                 </a>

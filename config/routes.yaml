@@ -14,6 +14,20 @@ upvote_blog_post:
   path: /post/{id}/upvote
   controller: App\Controller\BlogPostsController::upvoteBlogPost
   methods: POST
+favorite_blog_post:
+  path: /post/{id}/favorite
+  controller: App\Controller\BlogPostsController::favoriteBlogPost
+  methods: POST
+
+unfavorite_blog_post:
+  path: /post/{id}/unfavorite
+  controller: App\Controller\BlogPostsController::unfavoriteBlogPost
+  methods: POST
+
+
+categories:
+  path: /categories/category/{category-id}/edit
+  controller: App\Controller\UserController::editCategory
 
 user_profile:
   path: /profile/{userId}

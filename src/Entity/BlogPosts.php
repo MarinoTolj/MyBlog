@@ -30,15 +30,22 @@ class BlogPosts
     private int $numOfLikes=0;
 
     #[ORM\ManyToMany(targetEntity: Users::class, mappedBy: 'likedPosts')]
+    #[ORM\JoinTable('users_like_posts')]
     private Collection $likedByUsers;
 
     #[ORM\ManyToMany(targetEntity: Users::class, mappedBy: 'favoritePosts')]
+    #[ORM\JoinTable('users_favorite_posts')]
     private Collection $favoritedByUsers;
+
+    #[ORM\ManyToMany(targetEntity: PostCategories::class, mappedBy: 'blogPosts')]
+    private Collection $postCategories;
 
     public function __construct()
     {
         $this->likedByUsers = new ArrayCollection();
         $this->favoritedByUsers = new ArrayCollection();
+        $this->postCategories = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -185,4 +192,32 @@ class BlogPosts
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, PostCategories>
+     */
+    public function getPostCategories(): Collection
+    {
+        return $this->postCategories;
+    }
+
+    public function addPostCategory(PostCategories $postCategory): static
+    {
+        if (!$this->postCategories->contains($postCategory)) {
+            $this->postCategories->add($postCategory);
+            $postCategory->addBlogPost($this);
+        }
+
+        return $this;
+    }
+
+    public function removePostCategory(PostCategories $postCategory): static
+    {
+        if ($this->postCategories->removeElement($postCategory)) {
+            $postCategory->removeBlogPost($this);
+        }
+
+        return $this;
+    }
+
 }
