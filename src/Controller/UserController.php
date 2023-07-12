@@ -23,6 +23,7 @@ class UserController extends AbstractController
         $this->passwordHasher = $passwordHasher;
     }
 
+
     public function index(EntityManagerInterface $entityManager, Request $request): Response
     {
         $categories = $entityManager->getRepository(PostCategories::class)->findAll();
@@ -33,7 +34,6 @@ class UserController extends AbstractController
 
         if ($addCategoryForm->isSubmitted() && $addCategoryForm->isValid()) {
 
-
             $entityManager->persist($newCategory);
             $entityManager->flush();
         }
@@ -41,13 +41,40 @@ class UserController extends AbstractController
         return $this->render('user/index.html.twig', ['categories' => $categories, 'form' => $addCategoryForm->createView()]);
     }
 
-//    public function editCategory(EntityManagerInterface $entityManager, int $id): Response
-//    {
-//        $category=$entityManager->getRepository(PostCategories::class)->findBy(['id'=>$id]);
-//
-//        retr
-//
-//    }
+    public function editCategory(EntityManagerInterface $entityManager, $id, Request $request): Response
+    {
+        $category = $entityManager->getRepository(PostCategories::class)->findBy(['id' => $id])[0];
+
+        $editCategoryForm = $this->createForm(CategoryType::class, $category);
+
+        $editCategoryForm->handleRequest($request);
+
+        if ($editCategoryForm->isSubmitted() && $editCategoryForm->isValid()) {
+            $entityManager->persist($category);
+            $entityManager->flush();
+            return $this->redirectToRoute('user_profile', ['userId' => $this->getUser()->getId()]);
+        }
+
+        return $this->render('category/editCategory.html.twig', ['form' => $editCategoryForm->createView(), 'categoryId' => $category->getId()]);
+    }
+
+    public function deleteCategory(EntityManagerInterface $entityManager, Request $request, SluggerInterface $slugger, int $id): Response
+    {
+        $currentCategory = $entityManager->getRepository(PostCategories::class)->findBy(['id' => $id]);
+
+        if (!$currentCategory) {
+            throw $this->createNotFoundException(
+                'No product found for id ' . $id
+            );
+        }
+        $currentCategory = $currentCategory[0];
+
+        $entityManager->remove($currentCategory);
+        $entityManager->flush();
+
+        return new Response("All Good");
+    }
+
 
     public function editProfile(EntityManagerInterface $entityManager, $userId, Request $request, SluggerInterface $slugger): Response
     {

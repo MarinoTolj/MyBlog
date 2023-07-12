@@ -29,6 +29,44 @@
             width: 50px;
             height: 50px;
         }
+
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            width: 50%;
+        }
+
+        .btn {
+            all: unset;
+            background-color: green;
+            padding: 5px;
+            border-radius: 5px;
+            color: white;
+            text-align: center;
+            font-size: 12px;
+            width: 25%;
+            cursor: pointer;
+            margin-top: 5px;
+            margin-bottom: 20px;
+        }
+
+        .post-categories {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .category {
+            all: unset;
+            border-radius: 20px;
+            background-color: #5eb5e0;
+            color: white;
+            width: fit-content;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
     </style>
 
     <div class="user-profile">
@@ -39,11 +77,25 @@
                 <a href="{{ path("edit_user_profile", {'userId':app.user.id}) }}">Edit profile</a>
             </div>
             {% if is_granted("ROLE_ADMIN") %}
-                {{ form(form) }}
-                <p>Edit post categories here</p>
-                {% for category in categories %}
-                    <p>{{ category.name }}</p>
-                {% endfor %}
+                <div style="max-width: 40%;width: 20%">
+                    {{ form_start(form) }}
+                    <div class="input-container">
+                        {{ form_label(form.name) }}
+                        {{ form_widget(form.name) }}
+                        {{ form_row(form.save, {'attr': {'class': 'btn'}}) }}
+                    </div>
+                    {{ form_end(form) }}
+
+                    <div class="post-categories">
+                        <p>Click to edit post categories here</p>
+                        {% for category in categories %}
+                            <a href="{{ path('edit_category', {'id':category.id}) }}"
+                               class="category">{{ category.name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+
             {% endif %}
             <div>
                 <h3>Your comments: </h3>

@@ -18,16 +18,16 @@ class BlogPosts
 
     #[ORM\Column(length: 255)]
     private ?string $title = null;
-    #[ORM\Column(type:"text", length: 65535)]
+    #[ORM\Column(type: "text", length: 65535)]
     private ?string $body = null;
-    #[ORM\Column(length:255)]
-    private ?string $imageFilename=null;
+    #[ORM\Column(length: 255)]
+    private ?string $imageFilename = null;
 
     #[ORM\OneToMany(mappedBy: 'postId', targetEntity: Comments::class)]
     private Collection $comments;
 
     #[ORM\Column(type: 'integer')]
-    private int $numOfLikes=0;
+    private int $numOfLikes = 0;
 
     #[ORM\ManyToMany(targetEntity: Users::class, mappedBy: 'likedPosts')]
     #[ORM\JoinTable('users_like_posts')]
@@ -111,7 +111,7 @@ class BlogPosts
         return $this;
     }
 
-    public function removeComment(Comments $comment): static
+    public function removeComments(Comments $comment): static
     {
         if ($this->comments->removeElement($comment)) {
             // set the owning side to null (unless already changed)

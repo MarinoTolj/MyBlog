@@ -29,15 +29,22 @@ edit_blog_post:
 delete_blog_post:
   path: /posts/{id}/delete
   controller: App\Controller\BlogPostsController::deleteBlogPost
+  methods: DELETE
+  
 
 delete_comment:
   path: /comments/{id}/delete
   controller: App\Controller\CommentsController::deleteComment
+  methods: DELETE
 
 
-categories:
-  path: /categories/category/{category-id}/edit
+edit_category:
+  path: /categories/category/{id}/edit
   controller: App\Controller\UserController::editCategory
+delete_category:
+  path: /categories/category/{id}/delete
+  controller: App\Controller\UserController::deleteCategory
+  methods: DELETE
 
 user_profile:
   path: /profile/{userId}

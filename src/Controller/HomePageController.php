@@ -16,6 +16,7 @@ class HomePageController extends AbstractController
         $blogPosts = $entityManager->getRepository(BlogPosts::class)->findAll();
         //Adminadmin1
         //Useruser123
+        //~
         $users = $entityManager->getRepository(Users::class)->findAll();
         $comments = $entityManager->getRepository(Comments::class)->findAll();
 

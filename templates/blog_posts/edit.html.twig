@@ -48,6 +48,7 @@
             padding: 10px 20px;
             margin: 10px 0px;
             border-radius: 5px;
+            cursor: pointer;
         }
     </style>
 
@@ -71,13 +72,13 @@
         </div>
         <div class="input-container">
             {{ form_label(form.imageFilename) }}
-            {{ form_widget(form.imageFilename) }}
+            {{ form_widget(form.imageFilename, {'required':false}) }}
             {{ form_errors(form.imageFilename) }}
         </div>
         {{ form_row(form.save, {'attr': {'class': 'btn'}}) }}
         {{ form_end(form) }}
-        <div {{ stimulus_controller('blogPost', {'blogPostId':blogPostId}) }}>
-            <button {{ stimulus_action('blogPost', 'deleteBlogPost') }} class="deleteBtn">Delete This Blog Post</button>
+        <div {{ stimulus_controller('post', {blogPostId:blogPostId}) }}>
+            <button {{ stimulus_action('post', 'deleteBlogPost') }} class="deleteBtn">Delete This Blog Post</button>
         </div>
         <a href="{{ path("show_blog_post", {"id":blogPostId}) }}">
             Return to post

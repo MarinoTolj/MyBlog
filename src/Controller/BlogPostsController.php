@@ -70,8 +70,8 @@ class BlogPostsController extends AbstractController
                     var_dump($e);
                 }
             }
-            $categories = $editForm->get("categories")->getData();
             $currentBlogPost->setImageFilename($newFilename);
+            $categories = $editForm->get("categories")->getData();
             foreach ($categories as $key => $value) {
                 $category = $entityManager->getRepository(PostCategories::class)->findBy(['name' => $value]);
                 $currentBlogPost->addPostCategory($category[0]);
@@ -88,11 +88,23 @@ class BlogPostsController extends AbstractController
         ]);
     }
 
-    public function deleteBlogPost(EntityManagerInterface $entityManager, Request $request, SluggerInterface $slugger, int $id): Response
+    public function deleteBlogPost(EntityManagerInterface $entityManager, int $id): Response
     {
 
-        $currentBlogPost = $entityManager->getRepository(BlogPosts::class)->findBy(['id' => $id])[0];
+        $currentBlogPost = $entityManager->getRepository(BlogPosts::class)->findBy(['id' => $id]);
 
+        if (!$currentBlogPost) {
+            throw $this->createNotFoundException(
+                'No product found for id ' . $id
+            );
+        }
+        $currentBlogPost = $currentBlogPost[0];
+
+        $blogPostComments = $entityManager->getRepository(Comments::class)->findBy(['postId' => $currentBlogPost->getId()]);
+        foreach ($blogPostComments as $comment) {
+            $entityManager->remove($comment);
+            $entityManager->flush();
+        }
 
         $entityManager->remove($currentBlogPost);
         $entityManager->flush();
