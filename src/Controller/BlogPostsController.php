@@ -88,30 +88,6 @@ class BlogPostsController extends AbstractController
         ]);
     }
 
-    public function deleteBlogPost(EntityManagerInterface $entityManager, int $id): Response
-    {
-
-        $currentBlogPost = $entityManager->getRepository(BlogPosts::class)->findBy(['id' => $id]);
-
-        if (!$currentBlogPost) {
-            throw $this->createNotFoundException(
-                'No product found for id ' . $id
-            );
-        }
-        $currentBlogPost = $currentBlogPost[0];
-
-        $blogPostComments = $entityManager->getRepository(Comments::class)->findBy(['postId' => $currentBlogPost->getId()]);
-        foreach ($blogPostComments as $comment) {
-            $entityManager->remove($comment);
-            $entityManager->flush();
-        }
-
-        $entityManager->remove($currentBlogPost);
-        $entityManager->flush();
-
-        return new Response("All Good");
-    }
-
 
     public function showBlogPost(Request $request, EntityManagerInterface $entityManager, int $id): Response
     {
@@ -230,5 +206,30 @@ class BlogPostsController extends AbstractController
 
         return new Response("All good");
     }
+
+    public function deleteBlogPost(EntityManagerInterface $entityManager, int $id): Response
+    {
+
+        $currentBlogPost = $entityManager->getRepository(BlogPosts::class)->findBy(['id' => $id]);
+
+        if (!$currentBlogPost) {
+            throw $this->createNotFoundException(
+                'No product found for id ' . $id
+            );
+        }
+        $currentBlogPost = $currentBlogPost[0];
+
+        $blogPostComments = $entityManager->getRepository(Comments::class)->findBy(['postId' => $currentBlogPost->getId()]);
+        foreach ($blogPostComments as $comment) {
+            $entityManager->remove($comment);
+            $entityManager->flush();
+        }
+
+        $entityManager->remove($currentBlogPost);
+        $entityManager->flush();
+
+        return new Response("All Good");
+    }
+
 
 }

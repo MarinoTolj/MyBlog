@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Comments;
 
+use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,11 +21,20 @@ class CommentsController extends AbstractController
         ]);
     }
 
-    public function deleteComment(EntityManagerInterface $entityManager, Request $request, int $id):Response{
-        $comment=$entityManager->getRepository(Comments::class)->findBy(['id'=>$id]);
+    public function deleteComment(EntityManagerInterface $entityManager, int $id): Response
+    {
+        $comment = $entityManager->getRepository(Comments::class)->findBy(['id' => $id]);
 
         $entityManager->remove($comment[0]);
         $entityManager->flush();
         return new Response("All good");
+    }
+
+    public function commentWithUser(EntityManagerInterface $entityManager, int $id): Response
+    {
+        $comment = $entityManager->getRepository(Comments::class)->findBy(['id' => $id])[0];
+        $user = $entityManager->getRepository(Users::class)->findBy(['id' => $comment->getUserId()])[0];
+
+        return $this->render("comments/_commentWithUser.html.twig", ['comment' => $comment, 'user' => $user]);
     }
 }

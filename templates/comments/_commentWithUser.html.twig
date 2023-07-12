@@ -1,0 +1,52 @@
+{% block body %}
+    <style>
+        .comment-body {
+            /*border: #444444 solid 2px;*/
+            padding: 10px;
+            flex-grow: 1;
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .user-name {
+            text-align: start;
+            margin: 0px;
+            font-size: 20px;
+            color: black;
+        }
+
+        .deleteBtn {
+            color: red;
+            cursor: pointer;
+            font-size: 20px;
+            height: fit-content;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            justify-self: start;
+        }
+
+        .comment {
+            flex-grow: 1;
+        }
+    </style>
+
+    <img src="{{ asset('/uploads/images/'~user.avatar) }}" alt="User avatar" class="avatar">
+    <div class="comment">
+        <p class="user-name">{{ user.username }}</p>
+        <div class="comment-body">
+            <p style="text-align: start;margin: 0px;flex-basis: 80%;">{{ comment.body }}</p>
+
+            {% if (app.user is not null and app.user.id == comment.userId) or is_granted("ROLE_ADMIN") %}
+                <a {{ stimulus_action('comment', 'deleteComment') }} class="deleteBtn">
+                    Delete Comment
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+
+{% endblock %}

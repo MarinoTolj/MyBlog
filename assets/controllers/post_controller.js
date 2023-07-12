@@ -7,10 +7,6 @@ export default class extends Controller {
         blogPostId: String,
     }
 
-    connect() {
-        console.log("connect")
-    }
-
     upvote(event) {
         event.preventDefault();
         axios.post(`/posts/${this.blogPostIdValue}/upvote`);
