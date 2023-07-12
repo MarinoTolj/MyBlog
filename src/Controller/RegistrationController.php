@@ -31,13 +31,14 @@ class RegistrationController extends AbstractController
     {
         $this->passwordHasher = $passwordHasher;
     }
+
     public function index(EntityManagerInterface $entityManager, Request $request): Response
     {
 
         $userForm = new UserForm();
-        $user=new Users();
+        $user = new Users();
 
-        $form=$this->createForm(UserFormType::class, $userForm);
+        $form = $this->createForm(UserFormType::class, $userForm);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -45,37 +46,37 @@ class RegistrationController extends AbstractController
 
             //if($this->isPasswordValid($userData, $form)){
 
-                $user->setPassword($this->passwordHasher->hashPassword($user, $userData->getPassword()));
-                $user->setUsername($userData->getUsername());
-                $user->setEmail($userData->getEmail());
-                $user->setRoles(["ROLE_USER"]);
+            $user->setPassword($this->passwordHasher->hashPassword($user, $userData->getPassword()));
+            $user->setUsername($userData->getUsername());
+            $user->setEmail($userData->getEmail());
+            $user->setRoles(["ROLE_USER"]);
+            $user->setAvatar("TODO");
 
-                $entityManager->persist($user);
+            $entityManager->persist($user);
 
-                $entityManager->flush();
-                return $this->redirectToRoute('login');
+            $entityManager->flush();
+            return $this->redirectToRoute('login');
             //}
         }
 
         return $this->render('registration/index.html.twig', [
-            'form'=>$form->createView(),
+            'form' => $form->createView(),
         ]);
     }
 
-    public function isPasswordValid(mixed $userData, FormInterface $form):FormError | bool{
-        $userPassword=$userData->getPassword();
-        if($userPassword!==$userData->getPasswordConfirm()){
+    public function isPasswordValid(mixed $userData, FormInterface $form): FormError|bool
+    {
+        $userPassword = $userData->getPassword();
+        if ($userPassword !== $userData->getPasswordConfirm()) {
             $form->addError(new FormError("Password mismatch"));
             return false;
-        }
-        else if(strlen($userPassword)<10){
+        } else if (strlen($userPassword) < 10) {
             $form->addError(new FormError("Password length must be larger than 10 characters"));
             return false;
-        }else if(!preg_match("/\d+/",$userPassword)){
+        } else if (!preg_match("/\d+/", $userPassword)) {
             $form->addError(new FormError("Password must have at least one number, one letter and one capital letter"));
             return false;
-        }
-        else if(!preg_match("/[A-Z]+/",$userPassword)){
+        } else if (!preg_match("/[A-Z]+/", $userPassword)) {
             $form->addError(new FormError("Password must have at least one capital letter"));
             return false;
         }

@@ -3,12 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\BlogPosts;
-use App\Entity\Comments;
-use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 class HomePageController extends AbstractController
 {
@@ -31,7 +28,7 @@ class HomePageController extends AbstractController
 
 
         return $this->render('homePage/index.html.twig', [
-            'blogPosts'=>$blogPosts
+            'blogPosts' => $blogPosts
         ]);
     }
 }

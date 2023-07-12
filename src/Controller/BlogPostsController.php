@@ -5,20 +5,15 @@ namespace App\Controller;
 use App\Entity\BlogPosts;
 use App\Entity\Comments;
 use App\Entity\PostCategories;
-use App\Entity\Users;
 use App\Form\BlogPostType;
 use App\Form\CommentsType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Form\FormError;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\String\Slugger\SluggerInterface;
-use function Symfony\Component\String\b;
 
 class BlogPostsController extends AbstractController
 {

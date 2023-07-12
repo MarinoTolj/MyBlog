@@ -44,6 +44,9 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\JoinTable('users_favorite_posts')]
     private Collection $favoritePosts;
 
+    #[ORM\Column(length: 255)]
+    private ?string $avatar = null;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -199,6 +202,18 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
     public function removeFavoritePost(BlogPosts $favoritePost): static
     {
         $this->favoritePosts->removeElement($favoritePost);
+
+        return $this;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(string $avatar): static
+    {
+        $this->avatar = $avatar;
 
         return $this;
     }

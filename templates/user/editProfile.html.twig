@@ -1,13 +1,70 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello UserController!{% endblock %}
-
 {% block body %}
     <style>
+        .form-container {
+            width: 500px;
+            min-width: fit-content;
+            margin: 20px auto 0;
+        }
 
+        form {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .input-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .btn {
+            all: unset;
+            background-color: green;
+            padding: 15px;
+            border-radius: 5px;
+            color: white;
+            text-align: center;
+            font-size: 20px;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        h2 {
+            color: #444;
+        }
+
+        ul {
+            color: #B0413E;
+            font-size: 18px;
+        }
     </style>
 
-    <div class="example-wrapper">
-        TODO: edit
+    <div class="form-container">
+        <h2>Edit profile.</h2>
+        {{ form_start(form) }}
+        <div class="input-container">
+            {{ form_label(form.username) }}
+            {{ form_widget(form.username) }}
+        </div>
+        <div class="input-container">
+            {{ form_label(form.email) }}
+            {{ form_widget(form.email) }}
+        </div>
+        <div class="input-container">
+            {{ form_label(form.oldPassword) }}
+            {{ form_widget(form.oldPassword) }}
+            {{ form_errors(form) }}
+        </div>
+        <div class="input-container">
+            {{ form_label(form.newPassword) }}
+            {{ form_widget(form.newPassword) }}
+            {{ form_errors(form.newPassword) }}
+        </div>
+
+        {{ form_row(form.save, {'attr': {'class': 'btn'}}) }}
+        {{ form_end(form) }}
     </div>
 {% endblock %}
