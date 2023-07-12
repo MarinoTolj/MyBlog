@@ -43,15 +43,22 @@ class BlogPostsController extends AbstractController
     public function editBlogPost(EntityManagerInterface $entityManager, Request $request, SluggerInterface $slugger, int $id): Response
     {
 
-        $currentBlogPost=$entityManager->getRepository(BlogPosts::class)->findBy(['id'=>$id])[0];
+        $currentBlogPost = $entityManager->getRepository(BlogPosts::class)->findBy(['id' => $id]);
+
+        if (!$currentBlogPost) {
+            throw $this->createNotFoundException(
+                'No product found for id ' . $id
+            );
+        }
+        $currentBlogPost = $currentBlogPost[0];
 
         $editForm = $this->createForm(BlogPostType::class, $currentBlogPost, [
-            'entity_manager'=>$entityManager,
+            'entity_manager' => $entityManager,
         ]);
 
         $editForm->handleRequest($request);
 
-        if($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($editForm->isSubmitted() && $editForm->isValid()) {
             $newFilename = '';
             $imageFile = $editForm->get("imageFilename")->getData();
             if ($imageFile) {
@@ -81,29 +88,42 @@ class BlogPostsController extends AbstractController
 
 
         return $this->render("blog_posts/edit.html.twig", [
-            'form'=>$editForm->createView(),
+            'form' => $editForm->createView(),
+            'blogPostId' => $currentBlogPost->getId(),
         ]);
+    }
+
+    public function deleteBlogPost(EntityManagerInterface $entityManager, Request $request, SluggerInterface $slugger, int $id): Response
+    {
+
+        $currentBlogPost = $entityManager->getRepository(BlogPosts::class)->findBy(['id' => $id])[0];
+
+
+        $entityManager->remove($currentBlogPost);
+        $entityManager->flush();
+
+        return new Response("All Good");
     }
 
 
     public function showBlogPost(Request $request, EntityManagerInterface $entityManager, int $id): Response
     {
         $blogPost = $entityManager->getRepository(BlogPosts::class)->find($id);
-        $comments = $entityManager->getRepository(Comments::class)->findBy(['postId'=>$id]);
+        $comments = $entityManager->getRepository(Comments::class)->findBy(['postId' => $id]);
 
-        $newComment=new Comments();
+        $newComment = new Comments();
 
-        $form=$this->createForm(CommentsType::class, $newComment);
+        $form = $this->createForm(CommentsType::class, $newComment);
         $form->handleRequest($request);
 
         $user = $this->getUser();
 
         if (!$blogPost) {
             throw $this->createNotFoundException(
-                'No product found for id '.$id
+                'No product found for id ' . $id
             );
         }
-        if($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             $newComment->setPostId($blogPost);
             $newComment->setUserId($user);
 
@@ -113,41 +133,42 @@ class BlogPostsController extends AbstractController
 
 
         return $this->render('blog_posts/post.html.twig', [
-            'post'=>$blogPost,
-            'form'=>$form->createView(),
-            'comments'=>$comments
+            'post' => $blogPost,
+            'form' => $form->createView(),
+            'comments' => $comments
         ]);
 
     }
+
     public function newBlogPost(EntityManagerInterface $entityManager, Request $request, SluggerInterface $slugger): Response
     {
         $blogPost = new BlogPosts();
 
-        $form=$this->createForm(BlogPostType::class, $blogPost, ['entity_manager' => $entityManager]);
+        $form = $this->createForm(BlogPostType::class, $blogPost, ['entity_manager' => $entityManager]);
 
         $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             //var_dump($blogPost);
-            $newFilename='';
-            $imageFile=$form->get("imageFilename")->getData();
-            if($imageFile){
-                $originalFilename=pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeFilename=$slugger->slug($originalFilename);
-                $newFilename=$safeFilename.'_'.uniqid().'.'.$imageFile->guessExtension();
+            $newFilename = '';
+            $imageFile = $form->get("imageFilename")->getData();
+            if ($imageFile) {
+                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '_' . uniqid() . '.' . $imageFile->guessExtension();
 
                 try {
                     $imageFile->move(
                         $this->getParameter('images_directory'),
                         $newFilename
                     );
-                }catch (FileException $e){
+                } catch (FileException $e) {
                     var_dump($e);
                 }
             }
-            $categories=$form->get("categories")->getData();
+            $categories = $form->get("categories")->getData();
             $blogPost->setImageFilename($newFilename);
-            foreach ($categories as $key=>$value){
-                $category=$entityManager->getRepository(PostCategories::class)->findBy(['name'=>$value]);
+            foreach ($categories as $key => $value) {
+                $category = $entityManager->getRepository(PostCategories::class)->findBy(['name' => $value]);
                 $blogPost->addPostCategory($category[0]);
             }
             $entityManager->persist($blogPost);
@@ -162,20 +183,23 @@ class BlogPostsController extends AbstractController
         ]);
     }
 
-    public function upvoteBlogPost(Request $request, EntityManagerInterface $entityManager, int $id):Response{
+    public function upvoteBlogPost(Request $request, EntityManagerInterface $entityManager, int $id): Response
+    {
 
         $blogPost = $entityManager->getRepository(BlogPosts::class)->find($id);
         $user = $this->security->getUser();
 
-        $blogPost->setNumOfLikes($blogPost->getNumOfLikes()+1);
+        $blogPost->setNumOfLikes($blogPost->getNumOfLikes() + 1);
         $blogPost->addLikedByUser($user);
 
         $entityManager->persist($blogPost);
         $entityManager->flush();
 
-       return new Response("All good");
+        return new Response("All good");
     }
-    public function favoriteBlogPost(Request $request, EntityManagerInterface $entityManager, int $id):Response{
+
+    public function favoriteBlogPost(Request $request, EntityManagerInterface $entityManager, int $id): Response
+    {
 
         $blogPost = $entityManager->getRepository(BlogPosts::class)->find($id);
         $user = $this->security->getUser();
@@ -184,10 +208,11 @@ class BlogPostsController extends AbstractController
         $entityManager->persist($blogPost);
         $entityManager->flush();
 
-       return new Response("All good");
+        return new Response("All good");
     }
 
-    public function unfavoriteBlogPost(Request $request, EntityManagerInterface $entityManager, int $id):Response{
+    public function unfavoriteBlogPost(Request $request, EntityManagerInterface $entityManager, int $id): Response
+    {
 
         $blogPost = $entityManager->getRepository(BlogPosts::class)->find($id);
         $user = $this->security->getUser();

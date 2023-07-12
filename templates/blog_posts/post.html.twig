@@ -2,9 +2,25 @@
 
 {% block body %}
     <style>
-        .container {display: flex;align-items: center;flex-direction: column;}
-        h2 {font-size: xxx-large;text-align: center;margin-top: 10px;color: #444444;}
-        img {border-radius: 20px; width: 400px; height: 300px;}
+        .container {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        h2 {
+            font-size: xxx-large;
+            text-align: center;
+            margin-top: 10px;
+            color: #444444;
+        }
+
+        img {
+            border-radius: 20px;
+            width: 400px;
+            height: 300px;
+        }
+
         article {
             font-size: xx-large;
             line-height: 3rem;
@@ -12,69 +28,104 @@
             max-width: 800px;
             margin-top: 20px;
         }
-        .likeIcon{
-            margin-bottom: 50px;
-        }
-        .comments-container {
 
-        }
         form {
             width: 100%;
 
         }
+
         textarea {
             width: 100%;
             height: 150px;
         }
-        #comments{
+
+        #comments {
             width: 40%;
             margin: 0 auto;
         }
-        .likeBtn{
+
+        .likeBtn {
             display: flex;
-            gap:5px;
+            gap: 5px;
             margin: 10px;
         }
+
         .likeBtn p {
             margin: 0;
         }
-        .favoriteBtn{
+
+        .favoriteBtn {
             display: flex;
-            gap:5px;
+            gap: 5px;
             margin: 10px;
         }
+
         .favoriteBtn p {
             margin: 0;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 5px;
+            font-size: 32px;
+        }
+
+        .deleteBtn {
+            all: unset;
+            background-color: red;
+            color: white;
+            padding: 10px 20px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+
+        .comment {
+            border: #444444 solid 2px;
+            padding: 10px;
+        }
+
+        .comment-container {
+            display: flex;
+            gap: 20px;
+            justify-content: space-around;
+        }
+
+        .comments-container {
+            width: 75%;
+            margin-bottom: 100px;
         }
     </style>
     <div class="container">
         <h2>{{ post.title }}</h2>
 
         <img src="{{ asset('uploads/images/' ~ post.imageFilename) }}" alt="Blog post image">
+
         <article>
             {{ post.body }}
         </article>
 
+        <div class="btn-container">
+
             <div {{ stimulus_controller('post', {
                 blogPostId:post.id
-                }) }} class="likeBtn">
-                    {% if app.user is not null%}
-                            {% if post in app.user.likedPosts %}
-                                <i class="fa-solid fa-thumbs-up"></i>
-                            {% elseif is_granted("ROLE_USER") or is_granted("ROLE_ADMIN") %}
-                                <a {{ stimulus_action('post', 'upvote', 'click') }} style="cursor: pointer;">
-                                    <i class="fa-regular fa-thumbs-up"></i>
-                                </a>
-                            {% endif %}
-                            <p>{{ post.likedByUsers|length }}</p>
-                        {% else %}
-                        <p><i class="fa-regular fa-thumbs-up"></i>{{ post.likedByUsers|length }}</p>
+            }) }} class="likeBtn">
+                {% if app.user is not null %}
+                    {% if post in app.user.likedPosts %}
+                        <i class="fa-solid fa-thumbs-up"></i>
+                    {% elseif is_granted("ROLE_USER") or is_granted("ROLE_ADMIN") %}
+                        <a {{ stimulus_action('post', 'upvote', 'click') }} style="cursor: pointer;">
+                            <i class="fa-regular fa-thumbs-up"></i>
+                        </a>
                     {% endif %}
+                    <p>{{ post.likedByUsers|length }}</p>
+                {% else %}
+                    <p><i class="fa-regular fa-thumbs-up"></i>{{ post.likedByUsers|length }}</p>
+                {% endif %}
             </div>
 
-        <div {{ stimulus_controller('post', {
-            blogPostId:post.id
-        }) }} class="favoriteBtn">
+            <div {{ stimulus_controller('post', {
+                blogPostId:post.id
+            }) }} class="favoriteBtn">
 
                 {% if app.user is not null and post in app.user.favoritePosts %}
                     <a {{ stimulus_action('post', 'unfavorite', 'click') }} style="cursor: pointer;">
@@ -86,18 +137,36 @@
                     </a>
                 {% endif %}
 
+            </div>
         </div>
+
+        {% if is_granted('ROLE_ADMIN') %}
+
+            <a href="{{ path('edit_blog_post', {'id':post.id}) }}" style="margin: 20px 0px;">
+                <button style="padding: 10px 20px;border-radius: 10px;cursor: pointer;font-size: 24px;">
+                    Edit post
+                </button>
+            </a>
+
+        {% endif %}
 
         {{ form(form) }}
 
         <div class="comments-container">
             <h3>Comments:</h3>
             <hr>
-            {%for comment in comments %}
-                <p class="comment">{{ comment.body }}</p>
-                {% if app.user is not null and app.user.id == comment.userId %}
-                    <button style="background-color: red;color: white;">Delete Comment</button>
-                {% endif %}
+            {% for comment in comments %}
+                <div {{ stimulus_controller('comment', {
+                    commentId:comment.id
+                }) }} class="comment-container">
+                    <p class="comment">{{ comment.body }}</p>
+
+                    {% if app.user is not null and app.user.id == comment.userId %}
+                        <button {{ stimulus_action('comment', 'deleteComment') }} class="deleteBtn">
+                            Delete Comment
+                        </button>
+                    {% endif %}
+                </div>
             {% endfor %}
 
         </div>

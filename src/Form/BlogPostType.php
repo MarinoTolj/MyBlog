@@ -27,26 +27,26 @@ class BlogPostType extends AbstractType
     {
         /** @var EntityManager $entityManager */
         $entityManager = $options['entity_manager'];
-        $categories=$entityManager->getRepository(PostCategories::class)->findAll();
-        $choices=[];
+        $categories = $entityManager->getRepository(PostCategories::class)->findAll();
+        $choices = [];
 
-        foreach($categories as $key=>$value){
-            $choices[$value->getName()]=$value->getName();
+        foreach ($categories as $key => $value) {
+            $choices[$value->getName()] = $value->getName();
         }
 
         $builder
-            ->add('title', TextType::class, ['label'=>'Title:', 'constraints'=>[new Length(['min'=>5, 'max'=>40])]])
-            ->add('body', TextareaType::class, ['label'=>'Body:', 'constraints'=>[new Length(['min'=>5, 'max'=>500])]])
+            ->add('title', TextType::class, ['label' => 'Title:', 'constraints' => [new Length(['min' => 5, 'max' => 40])]])
+            ->add('body', TextareaType::class, ['label' => 'Body:', 'constraints' => [new Length(['min' => 5, 'max' => 500])]])
             ->add('categories', ChoiceType::class, [
-                'choices'=>$choices,
-                'expanded'=>true,
-                'multiple'=>true,
-                'mapped' => false
-
+                'choices' => $choices,
+                'expanded' => true,
+                'multiple' => true,
+                'mapped' => false,
+                
             ])
             ->add('imageFilename', FileType::class, [
                 'label' => 'Image:',
-                'data_class'=>null,
+                'data_class' => null,
                 'constraints' => [
                     new File([
                         'maxSize' => '1024k',

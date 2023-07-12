@@ -35,6 +35,8 @@ security:
         # - { path: ^/profile, roles: ROLE_USER }
         - {path: ^/posts/new, roles: ROLE_ADMIN }
         - {path: ^/posts/[0-9]+/edit, roles: ROLE_ADMIN }
+        - {path: ^/posts/[0-9]+/delete, roles: ROLE_ADMIN }
+        - {path: ^/comments/[0-9]+/delete, roles: ROLE_ADMIN}
 
 when@test:
     security:

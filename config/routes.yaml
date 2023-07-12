@@ -4,6 +4,7 @@
 homePage:
   path: /
   controller: App\Controller\HomePageController::index
+
 new_blog_post:
   path: /posts/new
   controller: App\Controller\BlogPostsController::newBlogPost
@@ -11,20 +12,27 @@ show_blog_post:
   path: /posts/{id}
   controller: App\Controller\BlogPostsController::showBlogPost
 upvote_blog_post:
-  path: /post/{id}/upvote
+  path: /posts/{id}/upvote
   controller: App\Controller\BlogPostsController::upvoteBlogPost
   methods: POST
 favorite_blog_post:
-  path: /post/{id}/favorite
+  path: /posts/{id}/favorite
   controller: App\Controller\BlogPostsController::favoriteBlogPost
   methods: POST
 unfavorite_blog_post:
-  path: /post/{id}/unfavorite
+  path: /posts/{id}/unfavorite
   controller: App\Controller\BlogPostsController::unfavoriteBlogPost
   methods: POST
 edit_blog_post:
-  path: /post/{id}/edit
+  path: /posts/{id}/edit
   controller: App\Controller\BlogPostsController::editBlogPost
+delete_blog_post:
+  path: /posts/{id}/delete
+  controller: App\Controller\BlogPostsController::deleteBlogPost
+
+delete_comment:
+  path: /comments/{id}/delete
+  controller: App\Controller\CommentsController::deleteComment
 
 
 categories:
@@ -35,8 +43,8 @@ user_profile:
   path: /profile/{userId}
   controller: App\Controller\UserController::index
 edit_user_profile:
-    path: /profile/edit/{userId}
-    controller: App\Controller\UserController::editProfile
+  path: /profile/edit/{userId}
+  controller: App\Controller\UserController::editProfile
 
 registration:
   path: /registration
