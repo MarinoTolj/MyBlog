@@ -71,28 +71,47 @@
         }
 
         .deleteBtn {
-            all: unset;
-            background-color: red;
-            color: white;
-            padding: 10px 20px;
-            margin-top: 10px;
-            border-radius: 5px;
-        }
-
-        .comment {
-            border: #444444 solid 2px;
-            padding: 10px;
-        }
-
-        .comment-container {
-            display: flex;
-            gap: 20px;
-            justify-content: space-around;
+            color: red;
+            cursor: pointer;
+            font-size: 20px;
+            height: fit-content;
         }
 
         .comments-container {
             width: 75%;
             margin-bottom: 100px;
+        }
+
+        .comment-container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .comment-body {
+            /*border: #444444 solid 2px;*/
+            padding: 10px;
+            flex-grow: 1;
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            justify-self: start;
+        }
+
+        .comment {
+            flex-grow: 1;
+        }
+
+        .user-name {
+            text-align: start;
+            margin: 0px;
+            font-size: 20px;
+            color: black;
         }
     </style>
     <div class="container">
@@ -159,14 +178,23 @@
                 <div {{ stimulus_controller('comment', {
                     commentId:comment.id
                 }) }} class="comment-container">
-                    <p class="comment">{{ comment.body }}</p>
 
-                    {% if app.user is not null and app.user.id == comment.userId %}
-                        <button {{ stimulus_action('comment', 'deleteComment') }} class="deleteBtn">
-                            Delete Comment
-                        </button>
-                    {% endif %}
+                    <img src="{{ asset('/uploads/images/'~app.user.avatar) }}" alt="User avatar" class="avatar">
+                    <div class="comment">
+                        {# TODO: choose username from database #}
+                        <p class="user-name">{{ comment.userId }}</p>
+                        <div class="comment-body">
+                            <p style="text-align: start;margin: 0px;flex-basis: 80%;">{{ comment.body }}</p>
+
+                            {% if (app.user is not null and app.user.id == comment.userId) or is_granted("ROLE_ADMIN") %}
+                                <a {{ stimulus_action('comment', 'deleteComment') }} class="deleteBtn">
+                                    Delete Comment
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
+                <hr style="color: #CCC;">
             {% endfor %}
 
         </div>

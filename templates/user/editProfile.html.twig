@@ -63,6 +63,11 @@
             {{ form_widget(form.newPassword) }}
             {{ form_errors(form.newPassword) }}
         </div>
+        <div class="input-container">
+            {{ form_label(form.avatar) }}
+            {{ form_widget(form.avatar) }}
+            {{ form_errors(form.avatar) }}
+        </div>
 
         {{ form_row(form.save, {'attr': {'class': 'btn'}}) }}
         {{ form_end(form) }}

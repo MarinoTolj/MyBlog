@@ -9,9 +9,11 @@ use App\Form\EditUserFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use function Symfony\Component\String\b;
 
 class UserController extends AbstractController
@@ -47,7 +49,7 @@ class UserController extends AbstractController
 //
 //    }
 
-    public function editProfile(EntityManagerInterface $entityManager, $userId, Request $request): Response
+    public function editProfile(EntityManagerInterface $entityManager, $userId, Request $request, SluggerInterface $slugger): Response
     {
         $currentUser = $entityManager->getRepository(Users::class)->findBy(['id' => $userId]);
         $editedUser = new EditUserFormType();
@@ -82,6 +84,24 @@ class UserController extends AbstractController
                 if ($newPassword !== null) {
                     $currentUser->setPassword($this->passwordHasher->hashPassword($currentUser, $newPassword));
                 }
+                $newFilename = '';
+                $imageFile = $form->get("avatar")->getData();
+
+                if ($imageFile) {
+                    $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                    $safeFilename = $slugger->slug($originalFilename);
+                    $newFilename = $safeFilename . '_' . uniqid() . '.' . $imageFile->guessExtension();
+
+                    try {
+                        $imageFile->move(
+                            $this->getParameter('images_directory'),
+                            $newFilename
+                        );
+                    } catch (FileException $e) {
+                        var_dump($e);
+                    }
+                }
+                $currentUser->setAvatar($newFilename);
                 $currentUser->setUsername($newUsername);
                 $currentUser->setEmail($newEmail);
                 $entityManager->persist($currentUser);

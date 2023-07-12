@@ -3,47 +3,70 @@
 {% block title %}Hello UserController!{% endblock %}
 
 {% block body %}
-<style>
-    .user-profile {display: flex; justify-content: center;}
-    .user-profile-container {display: flex;flex-direction: column;align-items: center;}
-    .user-profile-container div {width: 100%;}
-    .comments {display: flex;gap: 15px;margin:20px;}
-</style>
+    <style>
+        .user-profile {
+            display: flex;
+            justify-content: center;
+        }
 
-<div class="user-profile">
-    <div class="user-profile-container">
-        <div>
-            <h2>Welcome {{ app.user.username }}</h2>
-            <a href="{{ path("edit_user_profile", {'userId':app.user.id}) }}">Edit profile</a>
-        </div>
-        {% if is_granted("ROLE_ADMIN") %}
-            {{ form(form) }}
-            <p>Edit post categories here</p>
-            {%for category in categories %}
-                <p>{{ category.name }}</p>
-            {% endfor %}
-        {% endif %}
-        <div>
-            <h3>Your comments: </h3>
-            {% for comment in app.user.comments %}
-                <div class="comments">
-                    <textarea rows="5" cols="50" disabled>{{ comment.body }}</textarea>
-                    <a href="{{ path('show_blog_post', {'id':comment.postId}) }}" style="width: fit-content;height: fit-content;">See related post</a>
-                </div>
-            {% endfor %}
+        .user-profile-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .user-profile-container div {
+            width: 100%;
+        }
+
+        .comments {
+            display: flex;
+            gap: 15px;
+            margin: 20px;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+        }
+    </style>
+
+    <div class="user-profile">
+        <div class="user-profile-container">
+            <div>
+                <h2>Welcome {{ app.user.username }}</h2>
+                <img src="{{ asset('uploads/images/'~ app.user.avatar) }}" alt="User avatar" class="avatar">
+                <a href="{{ path("edit_user_profile", {'userId':app.user.id}) }}">Edit profile</a>
+            </div>
+            {% if is_granted("ROLE_ADMIN") %}
+                {{ form(form) }}
+                <p>Edit post categories here</p>
+                {% for category in categories %}
+                    <p>{{ category.name }}</p>
+                {% endfor %}
+            {% endif %}
+            <div>
+                <h3>Your comments: </h3>
+                {% for comment in app.user.comments %}
+                    <div class="comments">
+                        <textarea rows="5" cols="50" disabled>{{ comment.body }}</textarea>
+                        <a href="{{ path('show_blog_post', {'id':comment.postId}) }}"
+                           style="width: fit-content;height: fit-content;">See related post</a>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div>
+                <h3>Your liked posts</h3>
+                {% include 'components/blogCards.html.twig' with {'blogPosts':app.user.likedPosts} %}
+            </div>
+            <div>
+                <h3>Your favorited posts</h3>
+                {% include 'components/blogCards.html.twig' with {'blogPosts':app.user.favoritePosts} %}
+            </div>
+
         </div>
 
-        <div>
-            <h3>Your liked posts</h3>
-            {% include 'components/blogCards.html.twig' with {'blogPosts':app.user.likedPosts} %}
-        </div>
-        <div>
-            <h3>Your favorited posts</h3>
-            {% include 'components/blogCards.html.twig' with {'blogPosts':app.user.favoritePosts} %}
-        </div>
 
     </div>
-
-
-</div>
 {% endblock %}
