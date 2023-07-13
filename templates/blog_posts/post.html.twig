@@ -142,13 +142,11 @@
             {{ form(form) }}
         {% endif %}
 
-        <div class="comments-container">
+        <div class="comments-container" {{ stimulus_controller('comment') }}>
             <h3>Comments:</h3>
             <hr>
             {% for comment in comments %}
-                <div {{ stimulus_controller('comment', {
-                    commentId:comment.id
-                }) }} class="comment-container">
+                <div class="comment-container">
                     {{ render(controller(
                         'App\\Controller\\CommentsController::commentWithUser', {id: comment.id}
                     )) }}

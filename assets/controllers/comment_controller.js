@@ -3,11 +3,13 @@ import axios from "axios";
 
 export default class extends Controller {
 
-    static values = {
-        commentId: String,
-    }
+    // static values = {
+    //     commentId: String,
+    // }
 
     deleteComment() {
-        axios.delete(`/comments/${this.commentIdValue}/delete`);
+        let commentParent = document.querySelector(".comment")
+        let commentId = commentParent.dataset.commentId
+        axios.delete(`/comments/${commentId}/delete`);
     }
 }

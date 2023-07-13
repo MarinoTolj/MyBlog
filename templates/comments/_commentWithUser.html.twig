@@ -35,7 +35,7 @@
     </style>
 
     <img src="{{ asset('/uploads/images/'~user.avatar) }}" alt="User avatar" class="avatar">
-    <div class="comment">
+    <div class="comment" data-comment-id="{{ comment.id }}">
         <p class="user-name">{{ user.username }}</p>
         <div class="comment-body">
             <p style="text-align: start;margin: 0px;flex-basis: 80%;">{{ comment.body }}</p>
