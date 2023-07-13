@@ -7,16 +7,20 @@ use App\Entity\Comments;
 use App\Entity\PostCategories;
 use App\Entity\Users;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\DBAL\Exception;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
-    public function __construct(UserPasswordHasherInterface $hasher)
+    public function __construct(UserPasswordHasherInterface $hasher, EntityManagerInterface $entityManager)
     {
         $this->hasher = $hasher;
+        $this->entityManager = $entityManager;
     }
+
 
     public function load(ObjectManager $manager): void
     {
@@ -24,6 +28,14 @@ class AppFixtures extends Fixture
         $blogPosts = [];
         $loremIpsum = "Tortor eu quisque eget proin eu lorem quis phasellus aliquam fusce et amet adipiscing purus rutrum commodo diam magna felis tincidunt phasellus adipiscing magna molestie.
 Vivamus sem proin eu et leo interdum eu scelerisque interdum tristique amet enim metus vivamus vivamus dolor gravida maximus molestie phasellus amet et ipsum ut.";
+//        $conn = $this->entityManager->getConnection();
+//
+//
+//        $sql = '
+//            ALTER TABLE blog_posts AUTO_INCREMENT = 1
+//            ';
+//
+//        $conn->executeQuery($sql);
 
         for ($i = 0; $i < 50; $i++) {
             $blogPost = new BlogPosts();
