@@ -9,6 +9,7 @@ use App\Form\BlogPostType;
 use App\Form\CommentsType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,6 +47,7 @@ class BlogPostsController extends AbstractController
             );
         }
         $currentBlogPost = $currentBlogPost[0];
+        $newFilename = $currentBlogPost->getImageFilename();
 
         $editForm = $this->createForm(BlogPostType::class, $currentBlogPost, [
             'entity_manager' => $entityManager,
@@ -54,9 +56,13 @@ class BlogPostsController extends AbstractController
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $newFilename = '';
             $imageFile = $editForm->get("imageFilename")->getData();
             if ($imageFile) {
+
+                $filesystem = new Filesystem();
+                $projectDir = $this->getParameter('kernel.project_dir');
+                $filesystem->remove($projectDir . "/public/uploads/images/" . $newFilename);
+
                 $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
                 $newFilename = $safeFilename . '_' . uniqid() . '.' . $imageFile->guessExtension();
@@ -70,15 +76,17 @@ class BlogPostsController extends AbstractController
                     var_dump($e);
                 }
             }
-            $currentBlogPost->setImageFilename($newFilename);
+
             $categories = $editForm->get("categories")->getData();
             foreach ($categories as $key => $value) {
                 $category = $entityManager->getRepository(PostCategories::class)->findBy(['name' => $value]);
                 $currentBlogPost->addPostCategory($category[0]);
             }
+            $currentBlogPost->setImageFilename($newFilename);
 
             $entityManager->persist($currentBlogPost);
             $entityManager->flush();
+            return $this->redirectToRoute('show_blog_post', ['id' => $currentBlogPost->getId()]);
         }
 
 
