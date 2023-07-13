@@ -6,6 +6,7 @@ use App\Entity\BlogPosts;
 use App\Entity\Comments;
 use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,9 +14,22 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class HomePageController extends AbstractController
 {
-    public function index(EntityManagerInterface $entityManager, TranslatorInterface $translator, Request $request): Response
+    public function index(EntityManagerInterface $entityManager, PaginatorInterface $paginator, Request $request): Response
     {
         $blogPosts = $entityManager->getRepository(BlogPosts::class)->findAll();
+
+
+        $qb = $entityManager->createQueryBuilder('a')
+            ->select("a")
+            ->from("App:BlogPosts", "a");
+
+        $query = $qb->getQuery();
+        $pagination = $paginator->paginate(
+            $query, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            10 /*limit per page*/
+        );
+
         //Adminadmin1
         //Useruser123
         //~
@@ -38,7 +52,8 @@ class HomePageController extends AbstractController
         //$this->removeDataFromDatabase($users, $entityManager);
 //        $this->removeDataFromDatabase($blogPosts, $entityManager);
         return $this->render('homePage/index.html.twig', [
-            'blogPosts' => $blogPosts
+            'blogPosts' => $blogPosts,
+            'pagination' => $pagination
         ]);
     }
 

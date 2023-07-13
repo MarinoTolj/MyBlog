@@ -1,10 +1,64 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<style>
-    .example-wrapper { width: 100%;display: flex;justify-content: center;margin-top: 20px; }
-</style>
-<div class="example-wrapper">
-    {{ include('components/blogCards.html.twig') }}
-</div>
+    <style>
+        .example-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+            column-gap: 2rem;
+            row-gap: 8rem;
+
+        }
+
+        .navigation {
+            font-size: 20px;
+            margin: 50px 0px;
+        }
+
+        .sorted a {
+            all: unset;
+            border-radius: 5px;
+            background-color: #059862;
+            padding: 12px 18px;
+            font-size: 20px;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+    <div class="example-wrapper">
+        <div class="count">
+            <h3 style="color: #444">
+                Total posts: {{ pagination.getTotalItemCount }}
+            </h3>
+            <div>
+                <h3 class="sorted">
+                    {{ knp_pagination_sortable(pagination, 'Sort', 'a.title') }}
+                </h3>
+            </div>
+            <div class="navigation">
+                {{ knp_pagination_render(pagination) }}
+            </div>
+        </div>
+        <div>
+            <div class="container">
+                {% for blogPost in pagination %}
+                    {{ include('components/blogCard.html.twig') }}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="navigation">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+
+    </div>
 {% endblock %}

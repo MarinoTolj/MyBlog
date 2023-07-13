@@ -38,7 +38,7 @@
 
         .btn {
             all: unset;
-            background-color: green;
+            background-color: #059862;
             padding: 5px;
             border-radius: 5px;
             color: white;
@@ -65,6 +65,14 @@
             width: fit-content;
             padding: 10px 20px;
             cursor: pointer;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+            column-gap: 2rem;
+            row-gap: 8rem;
+
         }
 
     </style>
@@ -110,11 +118,21 @@
 
             <div>
                 <h3>Your liked posts</h3>
-                {% include 'components/blogCards.html.twig' with {'blogPosts':app.user.likedPosts} %}
+                <div class="container">
+
+                    {% for blogPost in app.user.likedPosts %}
+                        {% include 'components/blogCard.html.twig' with {'blogPost':blogPost} %}
+                    {% endfor %}
+                </div>
             </div>
             <div>
                 <h3>Your favorited posts</h3>
-                {% include 'components/blogCards.html.twig' with {'blogPosts':app.user.favoritePosts} %}
+                <div class="container">
+
+                    {% for blogPost in app.user.favoritePosts %}
+                        {% include 'components/blogCard.html.twig' with {'blogPost':blogPost} %}
+                    {% endfor %}
+                </div>
             </div>
 
         </div>

@@ -1,13 +1,5 @@
 {% block body %}
     <style>
-        .container {
-            display: grid;
-            grid-template-columns: repeat(1, minmax(0, 1fr));
-            column-gap: 2rem;
-            row-gap: 8rem;
-
-        }
-
         @media (min-width: 768px) {
             .container {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -71,30 +63,24 @@
             gap: 10px;
         }
     </style>
+    <a href="{{ path("show_blog_post", {'id':blogPost.id}) }}" class="blog-title"
+       style="text-decoration: none;">
+        <article>
+            <div class="image-container">
+                <img src="{{ asset('uploads/images/' ~ blogPost.imageFilename) }}" alt="Blog post image"
+                     class="blog-card">
+            </div>
+            <div class="text">
+                <h3>{{ blogPost.title }}</h3>
+
+                <div class="categories">
+                    {% for cat in blogPost.postCategories %}
+                        <p class="category">{{ cat.name }}</p>
+                    {% endfor %}
+                </div>
+            </div>
 
 
-    <div class="container">
-        {% for blogPost in blogPosts %}
-            <a href="{{ path("show_blog_post", {'id':blogPost.id}) }}" class="blog-title"
-               style="text-decoration: none;">
-                <article>
-                    <div class="image-container">
-                        <img src="{{ asset('uploads/images/' ~ blogPost.imageFilename) }}" alt="Blog post image"
-                             class="blog-card">
-                    </div>
-                    <div class="text">
-                        <h3>{{ blogPost.title }}</h3>
-
-                        <div class="categories">
-                            {% for cat in blogPost.postCategories %}
-                                <p class="category">{{ cat.name }}</p>
-                            {% endfor %}
-                        </div>
-                    </div>
-
-
-                </article>
-            </a>
-        {% endfor %}
-    </div>
+        </article>
+    </a>
 {% endblock %}
