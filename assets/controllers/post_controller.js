@@ -13,7 +13,7 @@ export default class extends Controller {
     }
 
     favorite(event) {
-        axios.post(`/posts/${this.blogPostIdValue}/favorite`);
+        axios.post(`/posts/${this.blogPostIdValue}/favorite`).then(() => window.location.href = `/posts/${this.blogPostIdValue}`);
     }
 
     unfavorite(event) {

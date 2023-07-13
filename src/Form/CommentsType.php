@@ -14,13 +14,13 @@ class CommentsType extends AbstractType
     {
         $builder
             ->add('body', TextareaType::class, array(
-                'label'=>false,
+                'label' => false,
                 'attr' => array(
                     'placeholder' => 'Write Comment here'
-                )
+                ),
+                'label_format' => '%name%'
             ))
-            ->add('save', SubmitType::class, ['label'=>"Comment"])
-        ;
+            ->add('save', SubmitType::class, ['label' => "Comment", 'label_format' => '%name%']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

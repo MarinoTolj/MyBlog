@@ -1,65 +1,94 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
 homePage:
-  path: /
+  path: /{_locale}
   controller: App\Controller\HomePageController::index
+  requirements:
+    _locale: en|es
 
 new_blog_post:
-  path: /posts/new
+  path: /{_locale}/posts/new
   controller: App\Controller\BlogPostsController::newBlogPost
+  requirements:
+    _locale: en|es
 show_blog_post:
-  path: /posts/{id}
+  path: /{_locale}/posts/{id}
   controller: App\Controller\BlogPostsController::showBlogPost
+  requirements:
+    _locale: en|es
 upvote_blog_post:
-  path: /posts/{id}/upvote
+  path: /{_locale}/posts/{id}/upvote
   controller: App\Controller\BlogPostsController::upvoteBlogPost
+  requirements:
+    _locale: en|es
   methods: POST
 favorite_blog_post:
-  path: /posts/{id}/favorite
+  path: /{_locale}/posts/{id}/favorite
   controller: App\Controller\BlogPostsController::favoriteBlogPost
+  requirements:
+    _locale: en|es
   methods: POST
 unfavorite_blog_post:
-  path: /posts/{id}/unfavorite
+  path: /{_locale}/posts/{id}/unfavorite
   controller: App\Controller\BlogPostsController::unfavoriteBlogPost
+  requirements:
+    _locale: en|es
   methods: POST
 edit_blog_post:
-  path: /posts/{id}/edit
+  path: /{_locale}/posts/{id}/edit
   controller: App\Controller\BlogPostsController::editBlogPost
+  requirements:
+    _locale: en|es
 delete_blog_post:
-  path: /posts/{id}/delete
+  path: /{_locale}/posts/{id}/delete
   controller: App\Controller\BlogPostsController::deleteBlogPost
+  requirements:
+    _locale: en|es
   methods: DELETE
-  
+
 
 delete_comment:
-  path: /comments/{id}/delete
+  path: /{_locale}/comments/{id}/delete
   controller: App\Controller\CommentsController::deleteComment
+  requirements:
+    _locale: en|es
   methods: DELETE
 
 
 edit_category:
-  path: /categories/category/{id}/edit
+  path: /{_locale}/categories/category/{id}/edit
   controller: App\Controller\UserController::editCategory
+  requirements:
+    _locale: en|es
 delete_category:
-  path: /categories/category/{id}/delete
+  path: /{_locale}/categories/category/{id}/delete
   controller: App\Controller\UserController::deleteCategory
+  requirements:
+    _locale: en|es
   methods: DELETE
 
 user_profile:
-  path: /profile/{userId}
+  path: /{_locale}/profile/{userId}
   controller: App\Controller\UserController::index
+  requirements:
+    _locale: en|es
 edit_user_profile:
-  path: /profile/edit/{userId}
+  path: /{_locale}/profile/edit/{userId}
   controller: App\Controller\UserController::editProfile
+  requirements:
+    _locale: en|es
 
 registration:
-  path: /registration
+  path: /{_locale}/registration
   controller: App\Controller\RegistrationController::index
+  requirements:
+    _locale: en|es
 login:
-  path: /login
+  path: /{_locale}/login
   controller: App\Controller\SecurityController::login
+  requirements:
+    _locale: en|es
 logout:
-  path: /logout
+  path: /{_locale}/logout
   controller: App\Controller\LogoutController::index
+  requirements:
+    _locale: en|es
 

@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
-use function Symfony\Component\String\b;
 
 class UserController extends AbstractController
 {
@@ -29,6 +28,7 @@ class UserController extends AbstractController
         $categories = $entityManager->getRepository(PostCategories::class)->findAll();
         $newCategory = new PostCategories();
         $addCategoryForm = $this->createForm(CategoryType::class, $newCategory);
+        $request->setLocale("fr");
 
         $addCategoryForm->handleRequest($request);
 
@@ -36,6 +36,7 @@ class UserController extends AbstractController
 
             $entityManager->persist($newCategory);
             $entityManager->flush();
+            return $this->redirectToRoute('user_profile', ['userId' => $this->getUser()->getId()]);
         }
 
         return $this->render('user/index.html.twig', ['categories' => $categories, 'form' => $addCategoryForm->createView()]);

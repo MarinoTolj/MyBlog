@@ -138,8 +138,9 @@
             </a>
 
         {% endif %}
-
-        {{ form(form) }}
+        {% if app.user is not null %}
+            {{ form(form) }}
+        {% endif %}
 
         <div class="comments-container">
             <h3>Comments:</h3>

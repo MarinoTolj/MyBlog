@@ -18,26 +18,26 @@ class UserFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $isPasswordValid=[
-            new Length(['min'=>10]),
-            new Regex(['pattern'=>'/\d+/', 'message'=>'Your password must have at least one digit']),
-            new Regex(['pattern'=>'/[A-Z]+/', 'message'=>'Your password must have at least one capital letter'])
+        $isPasswordValid = [
+            new Length(['min' => 10]),
+            new Regex(['pattern' => '/\d+/', 'message' => 'Your password must have at least one digit']),
+            new Regex(['pattern' => '/[A-Z]+/', 'message' => 'Your password must have at least one capital letter'])
         ];
 
 
         $builder
-            ->add('username', TextType::class)
-            ->add('email', EmailType::class)
+            ->add('username', TextType::class, ['label_format' => '%name%'])
+            ->add('email', EmailType::class, ['label_format' => '%name%'])
             ->add('password', RepeatedType::class, [
-                'label'=>false,
-                'type'=>PasswordType::class,
-                'invalid_message'=>'The password fields must match.',
-                'first_options'=>['label'=>'Password'],
+                'label' => false,
+                'type' => PasswordType::class,
+                'invalid_message' => 'The password fields must match.',
+                'first_options' => ['label' => 'Password'],
                 'second_options' => ['label' => 'Confirm Password'],
-                'constraints'=>$isPasswordValid
+                'constraints' => $isPasswordValid,
+                'label_format' => '%name%'
             ])
-            ->add('save', SubmitType::class, ['label' => 'Submit'])
-        ;
+            ->add('save', SubmitType::class, ['label' => 'Submit']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
