@@ -45,7 +45,6 @@ class BlogPosts
         $this->likedByUsers = new ArrayCollection();
         $this->favoritedByUsers = new ArrayCollection();
         $this->postCategories = new ArrayCollection();
-
     }
 
     public function getId(): ?int

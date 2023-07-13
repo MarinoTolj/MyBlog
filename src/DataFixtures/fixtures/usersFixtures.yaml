@@ -1,0 +1,6 @@
+App\Entity\Users:
+  users_{1..4}:
+    username: <name()>
+    email: <email()>
+    avatar: 'user_64ae975453bf9.png'
+    roles: [ 'ROLE_USER' ]

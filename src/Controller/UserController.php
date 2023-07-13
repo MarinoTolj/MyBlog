@@ -80,8 +80,6 @@ class UserController extends AbstractController
     {
         $currentUser = $entityManager->getRepository(Users::class)->findBy(['id' => $userId]);
         $editedUser = new EditUserFormType();
-        $newUser = new Users();
-
 
         if (!$currentUser) {
             throw $this->createNotFoundException(
@@ -89,6 +87,7 @@ class UserController extends AbstractController
             );
         }
         $currentUser = $currentUser[0];
+        $newFilename = $currentUser->getAvatar();
 
         $form = $this->createForm(EditUserFormType::class, $editedUser);
 
@@ -111,7 +110,6 @@ class UserController extends AbstractController
                 if ($newPassword !== null) {
                     $currentUser->setPassword($this->passwordHasher->hashPassword($currentUser, $newPassword));
                 }
-                $newFilename = '';
                 $imageFile = $form->get("avatar")->getData();
 
                 if ($imageFile) {

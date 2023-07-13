@@ -3,14 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\BlogPosts;
-use App\Entity\Comments;
-use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Contracts\Translation\TranslatorInterface;
+
 
 class HomePageController extends AbstractController
 {
@@ -33,37 +31,10 @@ class HomePageController extends AbstractController
         //Adminadmin1
         //Useruser123
         //~
-        /*"controllers": {
-    "@symfony/ux-turbo": {
-      "turbo-core": {
-        "enabled": true,
-        "fetch": "eager"
-      },
-      "mercure-turbo-stream": {
-        "enabled": false,
-        "fetch": "eager"
-      }
-    }
-  },*/
-        //$users = $entityManager->getRepository(Users::class)->findAll();
-        //$comments = $entityManager->getRepository(Comments::class)->findAll();
 
-//        $this->removeDataFromDatabase($comments, $entityManager);
-        //$this->removeDataFromDatabase($users, $entityManager);
-//        $this->removeDataFromDatabase($blogPosts, $entityManager);
         return $this->render('homePage/index.html.twig', [
             'blogPosts' => $blogPosts,
             'pagination' => $pagination
         ]);
-    }
-
-    public function removeDataFromDatabase(mixed $data, EntityManagerInterface $entityManager)
-    {
-        foreach ($data as $item) {
-            //if ($item->getUsername() == "admin") {
-            $entityManager->remove($item);
-            $entityManager->flush();
-            //}
-        }
     }
 }

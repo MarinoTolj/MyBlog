@@ -1,0 +1,3 @@
+App\Entity\Comments:
+  comments_{1..50}:
+    body: <text()>
