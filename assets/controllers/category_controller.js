@@ -1,5 +1,6 @@
 import {Controller} from '@hotwired/stimulus';
 import axios from "axios";
+import {getLang} from "./helpers";
 
 export default class extends Controller {
 
@@ -8,6 +9,6 @@ export default class extends Controller {
     }
 
     deleteCategory() {
-        axios.delete(`/categories/category/${this.categoryIdValue}/delete`).then(() => window.location.href = "/");
+        axios.delete(`/categories/category/${this.categoryIdValue}/delete`).then(() => window.location.href = "/" + getLang());
     }
 }

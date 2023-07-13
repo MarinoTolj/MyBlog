@@ -7,65 +7,94 @@
             row-gap: 8rem;
 
         }
+
         @media (min-width: 768px) {
-            .container{
+            .container {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
             }
         }
 
         @media (min-width: 1280px) {
-            .container{
-               grid-template-columns: repeat(3, minmax(0, 1fr));
+            .container {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
             }
         }
-        a {width: 400px;}
-        img {width: 400px;height: 215px;}
+
+        a {
+            width: 400px;
+        }
+
+        img {
+            width: 400px;
+            height: 215px;
+        }
+
         article {
             display: flex;
             overflow: hidden;
             flex-direction: column;
             border-radius: 0.75rem;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            max-width: 25rem;}
-        .image-container {position: relative;object-fit: cover;}
+            max-width: 25rem;
+        }
+
+        .image-container {
+            position: relative;
+            object-fit: cover;
+        }
+
         .text {
             display: flex;
             padding: 1rem;
             flex-direction: column;
             height: 12rem;
         }
-        h3 {height: 4rem;
+
+        h3 {
+            height: 4rem;
             font-size: 1.5rem;
             line-height: 2rem;
             font-weight: 700;
-            color:black;
+            color: black;
         }
-        .category {border-radius: 20px; background-color: #5eb5e0;color:white;width: fit-content; padding: 10px 20px;}
-        .categories {display: flex;gap: 10px;}
+
+        .category {
+            border-radius: 20px;
+            background-color: #5eb5e0;
+            color: white;
+            width: fit-content;
+            padding: 10px 20px;
+        }
+
+        .categories {
+            display: flex;
+            gap: 10px;
+        }
     </style>
 
 
     <div class="container">
         {% for blogPost in blogPosts %}
-                <a href="/posts/{{ blogPost.id}}" class="blog-title" style="text-decoration: none;">
-                    <article>
-                        <div class="image-container">
-                            <img src="{{ asset('uploads/images/' ~ blogPost.imageFilename) }}" alt="Blog post image"
-                                   class="blog-card">
+            <a href="{{ path("show_blog_post", {'id':blogPost.id}) }}" class="blog-title"
+               style="text-decoration: none;">
+                <article>
+                    <div class="image-container">
+                        <img src="{{ asset('uploads/images/' ~ blogPost.imageFilename) }}" alt="Blog post image"
+                             class="blog-card">
+                    </div>
+                    <div class="text">
+                        <h3>{{ blogPost.title }}</h3>
+
+                        <div class="categories">
+                            {% for cat in blogPost.postCategories %}
+                                <p class="category">{{ cat.name }}</p>
+                            {% endfor %}
                         </div>
-                        <div class="text">
-                            <h3>{{ blogPost.title }}</h3>
-
-                            <div class="categories">
-                                {% for cat in blogPost.postCategories %}
-                                    <p class="category">{{ cat.name }}</p>
-                                {% endfor %}
-                            </div>
-                        </div>
+                    </div>
 
 
-                    </article>
-                </a>
+                </article>
+            </a>
         {% endfor %}
     </div>
 {% endblock %}

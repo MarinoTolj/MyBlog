@@ -1,5 +1,6 @@
 import {Controller} from '@hotwired/stimulus';
 import axios from "axios";
+import {getLang} from "./helpers";
 
 export default class extends Controller {
 
@@ -13,7 +14,7 @@ export default class extends Controller {
     }
 
     favorite(event) {
-        axios.post(`/posts/${this.blogPostIdValue}/favorite`).then(() => window.location.href = `/posts/${this.blogPostIdValue}`);
+        axios.post(`/posts/${this.blogPostIdValue}/favorite`);
     }
 
     unfavorite(event) {
@@ -22,6 +23,6 @@ export default class extends Controller {
 
     deleteBlogPost() {
         axios.delete(`/posts/${this.blogPostIdValue}/delete`).then(
-            () => window.location.href = "/");
+            () => window.location.href = "/" + getLang());
     }
 }

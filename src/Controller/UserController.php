@@ -28,7 +28,6 @@ class UserController extends AbstractController
         $categories = $entityManager->getRepository(PostCategories::class)->findAll();
         $newCategory = new PostCategories();
         $addCategoryForm = $this->createForm(CategoryType::class, $newCategory);
-        $request->setLocale("fr");
 
         $addCategoryForm->handleRequest($request);
 

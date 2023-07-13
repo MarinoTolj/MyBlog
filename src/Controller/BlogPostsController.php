@@ -114,14 +114,14 @@ class BlogPostsController extends AbstractController
             $entityManager->flush();
         }
 
-        $response = new Response(null, $form->isSubmitted() ? 422 : 200);
+        //$response = new Response(null, $form->isSubmitted() ? 422 : 200);
 
 
         return $this->render('blog_posts/post.html.twig', [
             'post' => $blogPost,
             'form' => $form->createView(),
             'comments' => $comments
-        ], $response);
+        ]);
 
     }
 
@@ -206,7 +206,7 @@ class BlogPostsController extends AbstractController
         $entityManager->persist($blogPost);
         $entityManager->flush();
 
-        return new Response("All good");
+        return $this->redirectToRoute('show_blog_post', ['id' => $blogPost->getId()]);
     }
 
     public function deleteBlogPost(EntityManagerInterface $entityManager, int $id): Response

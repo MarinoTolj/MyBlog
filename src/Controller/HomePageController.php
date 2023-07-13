@@ -31,8 +31,8 @@ class HomePageController extends AbstractController
       }
     }
   },*/
-        $users = $entityManager->getRepository(Users::class)->findAll();
-        $comments = $entityManager->getRepository(Comments::class)->findAll();
+        //$users = $entityManager->getRepository(Users::class)->findAll();
+        //$comments = $entityManager->getRepository(Comments::class)->findAll();
 
 //        $this->removeDataFromDatabase($comments, $entityManager);
         //$this->removeDataFromDatabase($users, $entityManager);
