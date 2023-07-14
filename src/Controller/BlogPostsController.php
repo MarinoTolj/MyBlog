@@ -224,7 +224,7 @@ class BlogPostsController extends AbstractController
 
         if (!$currentBlogPost) {
             throw $this->createNotFoundException(
-                'No product found for id ' . $id
+                'No post found for id:' . $id
             );
         }
         $currentBlogPost = $currentBlogPost[0];
@@ -238,7 +238,7 @@ class BlogPostsController extends AbstractController
         $entityManager->remove($currentBlogPost);
         $entityManager->flush();
 
-        return new Response("All Good");
+        return new Response("Deleted post with id:" . $id);
     }
 
 

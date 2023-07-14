@@ -28,10 +28,6 @@ class HomePageController extends AbstractController
             10 /*limit per page*/
         );
 
-        //Adminadmin1
-        //Useruser123
-        //~
-
         return $this->render('homePage/index.html.twig', [
             'blogPosts' => $blogPosts,
             'pagination' => $pagination

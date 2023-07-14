@@ -64,7 +64,7 @@ class UserController extends AbstractController
 
         if (!$currentCategory) {
             throw $this->createNotFoundException(
-                'No product found for id ' . $id
+                'No product category for id ' . $id
             );
         }
         $currentCategory = $currentCategory[0];
@@ -72,7 +72,7 @@ class UserController extends AbstractController
         $entityManager->remove($currentCategory);
         $entityManager->flush();
 
-        return new Response("All Good");
+        return new Response("Deleted catogory with id: " . $id);
     }
 
 

@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use Symfony\Component\Form\AbstractType;
 
 class UserForm
 {

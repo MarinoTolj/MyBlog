@@ -61,24 +61,4 @@ class RegistrationController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
-    public function isPasswordValid(mixed $userData, FormInterface $form): FormError|bool
-    {
-        $userPassword = $userData->getPassword();
-        if ($userPassword !== $userData->getPasswordConfirm()) {
-            $form->addError(new FormError("Password mismatch"));
-            return false;
-        } else if (strlen($userPassword) < 10) {
-            $form->addError(new FormError("Password length must be larger than 10 characters"));
-            return false;
-        } else if (!preg_match("/\d+/", $userPassword)) {
-            $form->addError(new FormError("Password must have at least one number, one letter and one capital letter"));
-            return false;
-        } else if (!preg_match("/[A-Z]+/", $userPassword)) {
-            $form->addError(new FormError("Password must have at least one capital letter"));
-            return false;
-        }
-
-        return true;
-    }
 }

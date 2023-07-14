@@ -7,34 +7,36 @@ use App\Entity\Comments;
 use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+
 
 class CommentsController extends AbstractController
 {
-    #[Route('/comments', name: 'app_comments')]
-    public function index(): Response
-    {
-        return $this->render('comments/index.html.twig', [
-            'controller_name' => 'CommentsController',
-        ]);
-    }
 
     public function deleteComment(EntityManagerInterface $entityManager, int $id): Response
     {
         $comment = $entityManager->getRepository(Comments::class)->findBy(['id' => $id]);
+        if (!$comment) {
+            throw $this->createNotFoundException('No comment found for id ' . $id);
+        }
 
         $entityManager->remove($comment[0]);
         $entityManager->flush();
-        return new Response("All good");
+        return new Response("Deleted comment with id: " . $id);
     }
 
     public function commentWithUser(EntityManagerInterface $entityManager, int $id): Response
     {
-        $comment = $entityManager->getRepository(Comments::class)->findBy(['id' => $id])[0];
-        $user = $entityManager->getRepository(Users::class)->findBy(['id' => $comment->getUserId()])[0];
+        $comment = $entityManager->getRepository(Comments::class)->findBy(['id' => $id]);
+        if (!$comment) {
+            throw $this->createNotFoundException('No comment found for id ' . $id);
+        }
 
-        return $this->render("comments/_commentWithUser.html.twig", ['comment' => $comment, 'user' => $user]);
+        $user = $entityManager->getRepository(Users::class)->findBy(['id' => $comment[0]->getUserId()]);
+        if (!$user) {
+            throw $this->createNotFoundException('No user found for id ' . $comment[0]->getUserId());
+        }
+
+        return $this->render("comments/_commentWithUser.html.twig", ['comment' => $comment[0], 'user' => $user[0]]);
     }
 }
