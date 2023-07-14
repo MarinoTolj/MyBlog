@@ -145,6 +145,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/hautelook/alice-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/nelmio/alice" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/theofidry/alice-data-fixtures" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/liip/functional-test-bundle" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

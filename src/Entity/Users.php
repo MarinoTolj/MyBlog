@@ -33,7 +33,7 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
     private Collection $comments;
 
 
-    #[ORM\Column(type:"json")]
+    #[ORM\Column(type: "json")]
     private $roles = [];
 
     #[ORM\ManyToMany(targetEntity: BlogPosts::class, inversedBy: 'likedByUsers')]
@@ -126,9 +126,9 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
     }
 
 
-    public function getSalt()
+    public function getSalt(): string
     {
-        // TODO: Implement getSalt() method.
+        return 'TODO: get salt';
     }
 
     public function eraseCredentials()

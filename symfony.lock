@@ -54,6 +54,9 @@
     "knplabs/knp-paginator-bundle": {
         "version": "v5.9.0"
     },
+    "liip/functional-test-bundle": {
+        "version": "4.10.0"
+    },
     "nelmio/alice": {
         "version": "3.12",
         "recipe": {

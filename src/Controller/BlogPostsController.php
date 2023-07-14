@@ -28,9 +28,8 @@ class BlogPostsController extends AbstractController
         $this->security = $security;
     }
 
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(): Response
     {
-
         return $this->render('blog_posts/newPost.html.twig', [
             'controller_name' => 'BlogPostsController',
         ]);
@@ -135,6 +134,8 @@ class BlogPostsController extends AbstractController
 
     public function newBlogPost(EntityManagerInterface $entityManager, Request $request, SluggerInterface $slugger): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $blogPost = new BlogPosts();
 
         $form = $this->createForm(BlogPostType::class, $blogPost, ['entity_manager' => $entityManager]);
@@ -167,7 +168,7 @@ class BlogPostsController extends AbstractController
             $entityManager->persist($blogPost);
             $entityManager->flush();
 
-            return $this->redirectToRoute("homePage");
+            return $this->redirectToRoute("show_blog_post", ['id' => $blogPost->getId()]);
         }
 
 
