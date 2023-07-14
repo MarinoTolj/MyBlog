@@ -1,36 +1,62 @@
 {% block body %}
     <style>
-        header {background-color: #5eb5e0; padding: 20px;}
-        body {margin: 0;}
-        header h1, p {text-align: center; color: #444;}
+        header {
+            background-color: #5eb5e0;
+            padding: 20px;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        header h1 {
+            text-align: center;
+            color: #444;
+            font-size: 46px;
+        }
+
+        .navBtn {
+            all: unset;
+        }
+
+        button {
+            all: unset;
+            cursor: pointer;
+            margin-right: 10px;
+            border-radius: 5px;
+            padding: 10px;
+            color: #444444;
+            border: #444444 solid 2px;
+            font-size: 26px;
+        }
     </style>
 
     <header>
         <h1>MY BLOG</h1>
-        <a href="{{ path("homePage") }}">
+        <a href="{{ path("homePage") }}" class="navBtn">
             <button>Home</button>
         </a>
         {% if app.user is null %}
-            <a href="{{ path("registration") }}">
+            <a href="{{ path("registration") }}" class="navBtn">
                 <button>Registration</button>
             </a>
-            <a href="{{ path("login") }}">
+            <a href="{{ path("login") }}" class="navBtn">
                 <button>Login</button>
             </a>
         {% else %}
-            <a href="{{ path("user_profile", {'userId':app.user.id}) }}">
+            <a href="{{ path("user_profile", {'userId':app.user.id}) }}" class="navBtn">
                 <button>Profile</button>
             </a>
         {% endif %}
 
         {% if app.user is not null and is_granted("ROLE_ADMIN") %}
-            <a href="{{ path("new_blog_post") }}">
+            <a href="{{ path("new_blog_post") }}" class="navBtn">
                 <button>New Post</button>
             </a>
         {% endif %}
 
-        {%if app.user is not null  %}
-            <a href="{{ path("logout") }}">
+        {% if app.user is not null %}
+            <a href="{{ path("logout") }}" class="navBtn">
                 <button>Logout</button>
             </a>
         {% endif %}
