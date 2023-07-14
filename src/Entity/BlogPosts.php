@@ -26,9 +26,6 @@ class BlogPosts
     #[ORM\OneToMany(mappedBy: 'postId', targetEntity: Comments::class)]
     private Collection $comments;
 
-    #[ORM\Column(type: 'integer')]
-    private int $numOfLikes = 0;
-
     #[ORM\ManyToMany(targetEntity: Users::class, mappedBy: 'likedPosts')]
     #[ORM\JoinTable('users_like_posts')]
     private Collection $likedByUsers;
@@ -120,22 +117,6 @@ class BlogPosts
         }
 
         return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getNumOfLikes(): int
-    {
-        return $this->numOfLikes;
-    }
-
-    /**
-     * @param int $numOfLikes
-     */
-    public function setNumOfLikes(int $numOfLikes): void
-    {
-        $this->numOfLikes = $numOfLikes;
     }
 
     /**

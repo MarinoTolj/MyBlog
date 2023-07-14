@@ -72,7 +72,7 @@ class UserController extends AbstractController
         $entityManager->remove($currentCategory);
         $entityManager->flush();
 
-        return new Response("Deleted catogory with id: " . $id);
+        return new Response("Deleted category with id: " . $id);
     }
 
 

@@ -2,14 +2,9 @@ import {Controller} from '@hotwired/stimulus';
 import axios from "axios";
 
 export default class extends Controller {
+    deleteComment(event) {
 
-    // static values = {
-    //     commentId: String,
-    // }
-
-    deleteComment() {
-        let commentParent = document.querySelector(".comment")
-        let commentId = commentParent.dataset.commentId
+        let commentId = event.target.dataset.commentId
         axios.delete(`/comments/${commentId}/delete`);
     }
 }

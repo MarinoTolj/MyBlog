@@ -80,8 +80,6 @@ login:
   requirements:
     _locale: en|es
 logout:
-  path: /{_locale}/logout
-  controller: App\Controller\LogoutController::index
-  requirements:
-    _locale: en|es
+  path: /logout
+  controller: App\Controller\SecurityController::logout
 

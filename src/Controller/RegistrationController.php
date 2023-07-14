@@ -24,26 +24,21 @@ class RegistrationController extends AbstractController
 
     public function index(EntityManagerInterface $entityManager, Request $request): Response
     {
-
-        $userForm = new UserForm();
         $user = new Users();
 
-        $form = $this->createForm(UserFormType::class, $userForm);
+        $form = $this->createForm(UserFormType::class, $user);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $userData = $form->getData();
 
-
             $user->setPassword($this->passwordHasher->hashPassword($user, $userData->getPassword()));
-            $user->setUsername($userData->getUsername());
-            $user->setEmail($userData->getEmail());
             $user->setRoles(["ROLE_USER"]);
             $user->setAvatar("user_64ae975453bf9.png");
 
             $entityManager->persist($user);
-
             $entityManager->flush();
+
             return $this->redirectToRoute('login');
         }
 

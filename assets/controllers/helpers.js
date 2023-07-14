@@ -1,3 +1,7 @@
+/**
+ * get browser's locale
+ * @returns {string}
+ */
 export function getLang() {
     let lang = ""
     if (navigator.languages !== undefined)

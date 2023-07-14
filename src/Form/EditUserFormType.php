@@ -28,25 +28,28 @@ class EditUserFormType extends AbstractType
 
 
         $builder
-            ->add('username', TextType::class, ['required' => false, 'mapped' => false])
-            ->add('email', EmailType::class, ['required' => false, 'mapped' => false])
+            ->add('username', TextType::class, ['required' => false, 'mapped' => false, 'label_format' => '%name%'])
+            ->add('email', EmailType::class, ['required' => false, 'mapped' => false, 'label_format' => '%name%'])
             ->add('oldPassword', PasswordType::class, [
                 'label' => 'Old password',
                 'constraints' => $isPasswordValid,
                 'required' => false,
                 'mapped' => false,
+                'label_format' => '%name%'
             ])
             ->add('newPassword', PasswordType::class, [
                 'label' => 'New password',
                 'constraints' => $isPasswordValid,
                 'required' => false,
                 'mapped' => false,
+                'label_format' => '%name%'
             ])
             ->add('avatar', FileType::class, [
-                'label' => 'Avatar:',
+                'label' => 'Avatar',
                 'required' => false,
                 'mapped' => false,
                 'data_class' => null,
+                'label_format' => '%name%',
                 'constraints' => [
                     new File([
                         'maxSize' => '1024k',
@@ -60,7 +63,7 @@ class EditUserFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('save', SubmitType::class, ['label' => 'Edit']);
+            ->add('save', SubmitType::class, ['label' => 'Edit', 'label_format' => '%name%']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

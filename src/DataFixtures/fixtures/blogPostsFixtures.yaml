@@ -3,4 +3,3 @@ App\Entity\BlogPosts:
     title: <text(20)>
     body: <text()>
     imageFilename: 'Zebra_64b01ebe0c564.jpg'
-    numOfLikes: 0

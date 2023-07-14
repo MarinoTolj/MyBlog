@@ -29,18 +29,10 @@ class BlogPostsController extends AbstractController
         $this->security = $security;
     }
 
-    public function index(): Response
-    {
-        return $this->render('blog_posts/newPost.html.twig', [
-            'controller_name' => 'BlogPostsController',
-        ]);
-    }
-
     public function editBlogPost(EntityManagerInterface $entityManager, Request $request, SluggerInterface $slugger, int $id): Response
     {
 
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
-
 
         $currentBlogPost = $entityManager->getRepository(BlogPosts::class)->findBy(['id' => $id]);
 
@@ -60,9 +52,12 @@ class BlogPostsController extends AbstractController
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $imageFile = $editForm->get("imageFilename")->getData();
+            //if admin chose new image file, upload it and delete old one
+
             if ($imageFile) {
 
                 $filesystem = new Filesystem();
+                //delete old image file
                 $projectDir = $this->getParameter('kernel.project_dir');
                 $filesystem->remove($projectDir . "/public/uploads/images/" . $newFilename);
 
@@ -127,9 +122,6 @@ class BlogPostsController extends AbstractController
             return $this->redirectToRoute('show_blog_post', ['id' => $id]);
 
         }
-        //$response = new Response(null, $form->isSubmitted() ? 422 : 200);
-        //$request->setRequestFormat(TurboBundle::STREAM_FORMAT);
-
 
         return $this->render('blog_posts/post.html.twig', [
             'post' => $blogPost,
@@ -149,7 +141,7 @@ class BlogPostsController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            //var_dump($blogPost);
+
             $newFilename = '';
             $imageFile = $form->get("imageFilename")->getData();
             if ($imageFile) {
@@ -168,10 +160,12 @@ class BlogPostsController extends AbstractController
             }
             $categories = $form->get("categories")->getData();
             $blogPost->setImageFilename($newFilename);
+
             foreach ($categories as $key => $value) {
                 $category = $entityManager->getRepository(PostCategories::class)->findBy(['name' => $value]);
                 $blogPost->addPostCategory($category[0]);
             }
+
             $entityManager->persist($blogPost);
             $entityManager->flush();
 
@@ -192,7 +186,6 @@ class BlogPostsController extends AbstractController
         $blogPost = $entityManager->getRepository(BlogPosts::class)->find($id);
         $user = $this->security->getUser();
 
-        $blogPost->setNumOfLikes($blogPost->getNumOfLikes() + 1);
         $blogPost->addLikedByUser($user);
 
         $entityManager->persist($blogPost);
@@ -241,9 +234,9 @@ class BlogPostsController extends AbstractController
         $currentBlogPost = $currentBlogPost[0];
 
         $blogPostComments = $entityManager->getRepository(Comments::class)->findBy(['postId' => $currentBlogPost->getId()]);
+        //when deleting blog post make sure all of it comments are first deleted because they share a relationship
         foreach ($blogPostComments as $comment) {
             $entityManager->remove($comment);
-            $entityManager->flush();
         }
 
         $entityManager->remove($currentBlogPost);

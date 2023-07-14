@@ -17,11 +17,15 @@ class HomePageController extends AbstractController
         $blogPosts = $entityManager->getRepository(BlogPosts::class)->findAll();
 
 
+        //query to get all blog posts
         $qb = $entityManager->createQueryBuilder('a')
             ->select("a")
             ->from("App:BlogPosts", "a");
 
         $query = $qb->getQuery();
+
+
+        //paginate query with KnpPaginator
         $pagination = $paginator->paginate(
             $query, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/

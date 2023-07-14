@@ -35,13 +35,14 @@
     </style>
 
     <img src="{{ asset('/uploads/images/'~user.avatar) }}" alt="User avatar" class="avatar">
-    <div class="comment" data-comment-id="{{ comment.id }}">
+    <div class="comment">
         <p class="user-name">{{ user.username }}</p>
         <div class="comment-body">
             <p style="text-align: start;margin: 0px;flex-basis: 80%;">{{ comment.body }}</p>
 
             {% if (app.user is not null and app.user.id == comment.userId) or is_granted("ROLE_ADMIN") %}
-                <a {{ stimulus_action('comment', 'deleteComment') }} class="deleteBtn">
+                <a {{ stimulus_action('comment', 'deleteComment') }} class="deleteBtn"
+                                                                     data-comment-id="{{ comment.id }}">
                     Delete Comment
                 </a>
             {% endif %}
