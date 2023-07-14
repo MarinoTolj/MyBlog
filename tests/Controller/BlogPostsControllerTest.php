@@ -19,7 +19,7 @@ class BlogPostsControllerTest extends WebTestCase
         $formData = [
             'title' => 'TestTitle',
             'body' => 'Test Body',
-            'imageFilename' => 'C:\Users\Korisnik\Desktop\faks\1. godina diplomskog\Napredne\Zebra.png'
+            'imageFilename' => 'path\to\imageFile.png'
         ];
 
         $client = static::createClient();
@@ -32,6 +32,7 @@ class BlogPostsControllerTest extends WebTestCase
 
         $client->loginUser($admin);
         $crawler = $client->request('GET', '/en/posts/new');
+        $this->assertStatusCode(200, $client);
 
         $formTest = $crawler->selectButton('Submit')->form();
         foreach ($formData as $key => $value) {

@@ -32,7 +32,7 @@
         .input-container {
             display: flex;
             flex-direction: column;
-            width: 50%;
+
         }
 
         .btn {
@@ -43,10 +43,10 @@
             color: white;
             text-align: center;
             font-size: 12px;
-            width: 25%;
             cursor: pointer;
             margin-top: 5px;
             margin-bottom: 20px;
+            width: 40%;
         }
 
         .post-categories {
@@ -79,6 +79,10 @@
             display: flex;
             flex-wrap: wrap;
         }
+
+        form {
+            width: 100%;
+        }
     </style>
 
     <div class="user-profile">
@@ -89,7 +93,7 @@
                 <a href="{{ path("edit_user_profile", {'userId':app.user.id}) }}">Edit profile</a>
             </div>
             {% if is_granted("ROLE_ADMIN") %}
-                <div style="max-width: 40%;width: 20%">
+                <div style="max-width: 60%;margin-top: 20px;">
                     {{ form_start(form) }}
                     <div class="input-container">
                         {{ form_label(form.name) }}

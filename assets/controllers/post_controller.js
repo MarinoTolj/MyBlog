@@ -14,15 +14,19 @@ export default class extends Controller {
     }
 
     favorite(event) {
-        axios.post(`/posts/${this.blogPostIdValue}/favorite`);
+        axios.post(`/posts/${this.blogPostIdValue}/favorite`).then(
+            () => window.location.href = "/" + getLang() + `posts/${this.blogPostIdValue}`);
     }
 
     unfavorite(event) {
-        axios.post(`/posts/${this.blogPostIdValue}/unfavorite`);
+        axios.post(`/posts/${this.blogPostIdValue}/unfavorite`).then(
+            () => window.location.href = "/" + getLang() + `posts/${this.blogPostIdValue}`);
     }
 
     deleteBlogPost() {
         axios.delete(`/posts/${this.blogPostIdValue}/delete`).then(
             () => window.location.href = "/" + getLang());
     }
+
+
 }

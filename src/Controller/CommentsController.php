@@ -15,6 +15,10 @@ class CommentsController extends AbstractController
 
     public function deleteComment(EntityManagerInterface $entityManager, int $id): Response
     {
+        if (!$this->isGranted('ROLE_USER') && !$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('not allowed');
+        }
+
         $comment = $entityManager->getRepository(Comments::class)->findBy(['id' => $id]);
         if (!$comment) {
             throw $this->createNotFoundException('No comment found for id ' . $id);

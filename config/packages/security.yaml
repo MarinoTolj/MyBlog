@@ -36,8 +36,6 @@ security:
     - { path: ^/posts/new, roles: ROLE_ADMIN }
     - { path: ^/posts/[ 0-9 ]+/edit, roles: ROLE_ADMIN }
     - { path: ^/posts/[ 0-9 ]+/delete, roles: ROLE_ADMIN }
-    - { path: ^/comments/[ 0-9 ]+/delete, roles: ROLE_USER }
-    - { path: ^/comments/[ 0-9 ]+/delete, roles: ROLE_ADMIN }
     - { path: ^/profile/edit/[ 0-9 ]+, roles: ROLE_USER }
     - { path: ^/profile/edit/[ 0-9 ]+, roles: ROLE_ADMIN }
 

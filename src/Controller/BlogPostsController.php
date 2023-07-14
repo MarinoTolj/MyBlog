@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
+
 class BlogPostsController extends AbstractController
 {
     /**
@@ -37,6 +38,9 @@ class BlogPostsController extends AbstractController
 
     public function editBlogPost(EntityManagerInterface $entityManager, Request $request, SluggerInterface $slugger, int $id): Response
     {
+
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
 
         $currentBlogPost = $entityManager->getRepository(BlogPosts::class)->findBy(['id' => $id]);
 
@@ -119,9 +123,12 @@ class BlogPostsController extends AbstractController
 
             $entityManager->persist($newComment);
             $entityManager->flush();
-        }
 
+            return $this->redirectToRoute('show_blog_post', ['id' => $id]);
+
+        }
         //$response = new Response(null, $form->isSubmitted() ? 422 : 200);
+        //$request->setRequestFormat(TurboBundle::STREAM_FORMAT);
 
 
         return $this->render('blog_posts/post.html.twig', [
@@ -177,8 +184,10 @@ class BlogPostsController extends AbstractController
         ]);
     }
 
+
     public function upvoteBlogPost(Request $request, EntityManagerInterface $entityManager, int $id): Response
     {
+
 
         $blogPost = $entityManager->getRepository(BlogPosts::class)->find($id);
         $user = $this->security->getUser();
@@ -220,6 +229,7 @@ class BlogPostsController extends AbstractController
 
     public function deleteBlogPost(EntityManagerInterface $entityManager, int $id): Response
     {
+
 
         $currentBlogPost = $entityManager->getRepository(BlogPosts::class)->findBy(['id' => $id]);
 

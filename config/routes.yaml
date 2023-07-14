@@ -18,6 +18,7 @@ show_blog_post:
   controller: App\Controller\BlogPostsController::showBlogPost
   requirements:
     _locale: en|es
+
 upvote_blog_post:
   path: /posts/{id}/upvote
   controller: App\Controller\BlogPostsController::upvoteBlogPost
