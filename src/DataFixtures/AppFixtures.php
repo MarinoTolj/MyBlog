@@ -39,6 +39,22 @@ class AppFixtures extends Fixture
         $categoriesArray = [];
 
 
+        $admin = new Users();
+        $admin->setUsername("Admin");
+        $admin->setRoles(["ROLE_ADMIN"]);
+        $admin->setEmail("admin@admin");
+        $password = $this->hasher->hashPassword($admin, "Adminadmin1");
+        $admin->setPassword($password);
+        $admin->setAvatar("man_64b3e66cc7a49.png");
+        $manager->persist($admin);
+
+        foreach ($users as $user) {
+            $user->setPassword($this->hasher->hashPassword($user, 'Useruser123'));
+            $manager->persist($user);
+            array_push($usersArray, $user);
+
+        }
+
         foreach ($categories as $category) {
             $manager->persist($category);
             array_push($categoriesArray, $category);
@@ -51,24 +67,8 @@ class AppFixtures extends Fixture
             }
             $manager->persist($blogPost);
             array_push($blogPostsArray, $blogPost);
-        }
-
-        $admin = new Users();
-        $admin->setUsername("Admin");
-        $admin->setRoles(["ROLE_ADMIN"]);
-        $admin->setEmail("admin@admin");
-        $password = $this->hasher->hashPassword($admin, "Adminadmin1");
-        $admin->setPassword($password);
-        $admin->setAvatar("man_64ae9a2fe3109.png");
-        $manager->persist($admin);
-
-        foreach ($users as $user) {
-            $user->setPassword($this->hasher->hashPassword($user, 'Useruser123'));
-            $manager->persist($user);
-            array_push($usersArray, $user);
 
         }
-
         foreach ($comments as $comment) {
             $comment->setUserId($usersArray[array_rand($usersArray)]);
             $comment->setPostId($blogPosts[array_rand($blogPosts)]);

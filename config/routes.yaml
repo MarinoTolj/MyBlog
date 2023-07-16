@@ -6,18 +6,18 @@ homePage:
   path: /{_locale}
   controller: App\Controller\HomePageController::index
   requirements:
-    _locale: en|es
+    _locale: en|es|hr
 
 new_blog_post:
   path: /{_locale}/posts/new
   controller: App\Controller\BlogPostsController::newBlogPost
   requirements:
-    _locale: en|es
+    _locale: en|es|hr
 show_blog_post:
   path: /{_locale}/posts/{id}
   controller: App\Controller\BlogPostsController::showBlogPost
   requirements:
-    _locale: en|es
+    _locale: en|es|hr
 
 upvote_blog_post:
   path: /posts/{id}/upvote
@@ -35,7 +35,7 @@ edit_blog_post:
   path: /{_locale}/posts/{id}/edit
   controller: App\Controller\BlogPostsController::editBlogPost
   requirements:
-    _locale: en|es
+    _locale: en|es|hr
 delete_blog_post:
   path: /posts/{id}/delete
   controller: App\Controller\BlogPostsController::deleteBlogPost
@@ -52,7 +52,7 @@ edit_category:
   path: /{_locale}/categories/category/{id}/edit
   controller: App\Controller\UserController::editCategory
   requirements:
-    _locale: en|es
+    _locale: en|es|hr
 delete_category:
   path: /categories/category/{id}/delete
   controller: App\Controller\UserController::deleteCategory
@@ -62,23 +62,23 @@ user_profile:
   path: /{_locale}/profile/{userId}
   controller: App\Controller\UserController::index
   requirements:
-    _locale: en|es
+    _locale: en|es|hr
 edit_user_profile:
   path: /{_locale}/profile/edit/{userId}
   controller: App\Controller\UserController::editProfile
   requirements:
-    _locale: en|es
+    _locale: en|es|hr
 
 registration:
   path: /{_locale}/registration
   controller: App\Controller\RegistrationController::index
   requirements:
-    _locale: en|es
+    _locale: en|es|hr
 login:
   path: /{_locale}/login
   controller: App\Controller\SecurityController::login
   requirements:
-    _locale: en|es
+    _locale: en|es|hr
 logout:
   path: /logout
   controller: App\Controller\SecurityController::logout

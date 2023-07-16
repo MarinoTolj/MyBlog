@@ -147,8 +147,8 @@
 
         {% if is_granted('ROLE_ADMIN') %}
 
-            <a href="{{ path('edit_blog_post', {'id':post.id}) }}" style="margin: 20px 0px;">
-                <button style="padding: 10px 20px;border-radius: 10px;cursor: pointer;font-size: 24px;">
+            <a href="{{ path('edit_blog_post', {'id':post.id}) }}" style="all: unset;margin: 20px 0;">
+                <button>
                     Edit post
                 </button>
             </a>
@@ -162,7 +162,9 @@
             {{ form_end(form) }}
         {% endif %}
 
-        <div class="comments-container" {{ stimulus_controller('comment') }}>
+        <div class="comments-container" {{ stimulus_controller('comment', {
+            blogPostId:post.id
+        }) }}>
             <h3>Comments:</h3>
             <hr>
             {% for comment in comments %}

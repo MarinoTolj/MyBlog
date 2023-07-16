@@ -49,7 +49,7 @@ class BlogPostType extends AbstractType
                 'data_class' => null,
                 'constraints' => [
                     new File([
-                        'maxSize' => '1024k',
+                        'maxSize' => '2048k',
                         'mimeTypes' => [
                             'image/png',
                             'image/jpg',

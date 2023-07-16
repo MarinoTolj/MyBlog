@@ -2,4 +2,4 @@ App\Entity\BlogPosts:
   blogPosts_{1..50}:
     title: <text(20)>
     body: <text()>
-    imageFilename: 'Zebra_64b01ebe0c564.jpg'
+    imageFilename: <getRandomImage()>

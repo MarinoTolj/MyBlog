@@ -10,17 +10,18 @@ export default class extends Controller {
 
     upvote(event) {
         event.preventDefault();
-        axios.post(`/posts/${this.blogPostIdValue}/upvote`);
+        axios.post(`/posts/${this.blogPostIdValue}/upvote`).then(
+            () => window.location.href = "/" + getLang() + `/posts/${this.blogPostIdValue}`);
     }
 
     favorite(event) {
         axios.post(`/posts/${this.blogPostIdValue}/favorite`).then(
-            () => window.location.href = "/" + getLang() + `posts/${this.blogPostIdValue}`);
+            () => window.location.href = "/" + getLang() + `/posts/${this.blogPostIdValue}`);
     }
 
     unfavorite(event) {
         axios.post(`/posts/${this.blogPostIdValue}/unfavorite`).then(
-            () => window.location.href = "/" + getLang() + `posts/${this.blogPostIdValue}`);
+            () => window.location.href = "/" + getLang() + `/posts/${this.blogPostIdValue}`);
     }
 
     deleteBlogPost() {

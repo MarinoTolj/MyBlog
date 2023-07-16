@@ -83,6 +83,11 @@
         form {
             width: 100%;
         }
+
+        h3 {
+            margin-bottom: -20px;
+            margin-top: 50px;
+        }
     </style>
 
     <div class="user-profile">
@@ -127,16 +132,14 @@
             <div>
                 <h3>Your liked posts</h3>
                 <div class="container">
-
                     {% for blogPost in app.user.likedPosts %}
                         {% include 'components/blogCard.html.twig' with {'blogPost':blogPost} %}
                     {% endfor %}
                 </div>
             </div>
             <div>
-                <h3>Your favorited posts</h3>
+                <h3>Your favorite posts</h3>
                 <div class="container">
-
                     {% for blogPost in app.user.favoritePosts %}
                         {% include 'components/blogCard.html.twig' with {'blogPost':blogPost} %}
                     {% endfor %}

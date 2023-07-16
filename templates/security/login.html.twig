@@ -43,16 +43,19 @@
             font-size: 18px;
         }
 
+        .error {
+            color: red;
+            font-size: 28px;
+        }
+
 
     </style>
     <div class="form-container">
         <form method="post">
-            {% if error %}
-                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-            {% endif %}
+
 
             {% if app.user %}
-                <div class="mb-3">
+                <div>
                     You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('logout') }}">Logout</a>
                 </div>
             {% endif %}
@@ -69,6 +72,10 @@
                        autocomplete="current-password" required>
             </div>
 
+            {% if error %}
+                <div class="error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+
             <input type="hidden" name="_csrf_token"
                    value="{{ csrf_token('authenticate') }}"
             >
@@ -80,6 +87,10 @@
                 <label>
                     <input type="checkbox" name="_remember_me"> Remember me
                 </label>
+            </div>
+
+            <div>
+                <a href="{{ path('registration') }}">Register</a>
             </div>
 
             <button class="btn btn-lg btn-primary" type="submit">

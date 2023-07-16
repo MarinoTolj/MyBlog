@@ -60,7 +60,12 @@
 
         .categories {
             display: flex;
-            gap: 10px;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .categories p {
+            margin: 0px;
         }
     </style>
     <a href="{{ path("show_blog_post", {'id':blogPost.id}) }}" class="blog-title"

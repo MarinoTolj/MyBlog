@@ -42,8 +42,10 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('login');
         }
 
+        $response = new Response(null, $form->isSubmitted() ? 422 : 200);
+
         return $this->render('registration/index.html.twig', [
             'form' => $form->createView(),
-        ]);
+        ], $response);
     }
 }

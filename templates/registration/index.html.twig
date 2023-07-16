@@ -46,6 +46,11 @@
 
     <div class="form-container">
         <h2>Register here.</h2>
+        {% if app.user %}
+            <div style="margin-bottom: 12px;">
+                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('logout') }}">Logout</a>
+            </div>
+        {% endif %}
         {{ form_start(form) }}
         <div class="input-container">
             {{ form_label(form.username) }}

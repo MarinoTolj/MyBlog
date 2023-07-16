@@ -134,7 +134,8 @@ class UserController extends AbstractController
                 return $this->redirectToRoute("user_profile", ['userId' => $userId]);
             }
         }
+        $response = new Response(null, $form->isSubmitted() ? 422 : 200);
 
-        return $this->render('user/editProfile.html.twig', ['form' => $form->createView()]);
+        return $this->render('user/editProfile.html.twig', ['form' => $form->createView()], $response);
     }
 }

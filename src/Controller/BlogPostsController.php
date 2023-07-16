@@ -87,11 +87,13 @@ class BlogPostsController extends AbstractController
             return $this->redirectToRoute('show_blog_post', ['id' => $currentBlogPost->getId()]);
         }
 
+        $response = new Response(null, $editForm->isSubmitted() ? 422 : 200);
+
 
         return $this->render("blog_posts/edit.html.twig", [
             'form' => $editForm->createView(),
             'blogPostId' => $currentBlogPost->getId(),
-        ]);
+        ], $response);
     }
 
 
@@ -122,6 +124,7 @@ class BlogPostsController extends AbstractController
             return $this->redirectToRoute('show_blog_post', ['id' => $id]);
 
         }
+
 
         return $this->render('blog_posts/post.html.twig', [
             'post' => $blogPost,
@@ -172,10 +175,12 @@ class BlogPostsController extends AbstractController
             return $this->redirectToRoute("show_blog_post", ['id' => $blogPost->getId()]);
         }
 
+        $response = new Response(null, $form->isSubmitted() ? 422 : 200);
+
 
         return $this->render('blog_posts/newPost.html.twig', [
             'form' => $form->createView(),
-        ]);
+        ], $response);
     }
 
 
