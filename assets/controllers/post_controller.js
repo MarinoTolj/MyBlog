@@ -9,8 +9,12 @@ export default class extends Controller {
     }
 
     upvote(event) {
-        event.preventDefault();
         axios.post(`/posts/${this.blogPostIdValue}/upvote`).then(
+            () => window.location.href = "/" + getLang() + `/posts/${this.blogPostIdValue}`);
+    }
+
+    downvote(event) {
+        axios.post(`/posts/${this.blogPostIdValue}/downvote`).then(
             () => window.location.href = "/" + getLang() + `/posts/${this.blogPostIdValue}`);
     }
 

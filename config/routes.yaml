@@ -23,6 +23,10 @@ upvote_blog_post:
   path: /posts/{id}/upvote
   controller: App\Controller\BlogPostsController::upvoteBlogPost
   methods: POST
+downvote_blog_post:
+  path: /posts/{id}/downvote
+  controller: App\Controller\BlogPostsController::downvoteBlogPost
+  methods: POST
 favorite_blog_post:
   path: /posts/{id}/favorite
   controller: App\Controller\BlogPostsController::favoriteBlogPost

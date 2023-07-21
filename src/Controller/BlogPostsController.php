@@ -199,6 +199,20 @@ class BlogPostsController extends AbstractController
         return new Response("All good");
     }
 
+    public function downvoteBlogPost(Request $request, EntityManagerInterface $entityManager, int $id): Response
+    {
+
+        $blogPost = $entityManager->getRepository(BlogPosts::class)->find($id);
+        $user = $this->security->getUser();
+
+        $blogPost->removeLikedByUser($user);
+
+        $entityManager->persist($blogPost);
+        $entityManager->flush();
+
+        return new Response("All good");
+    }
+
     public function favoriteBlogPost(Request $request, EntityManagerInterface $entityManager, int $id): Response
     {
 

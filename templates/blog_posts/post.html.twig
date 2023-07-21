@@ -116,7 +116,8 @@
             }) }} class="likeBtn">
                 {% if app.user is not null %}
                     {% if post in app.user.likedPosts %}
-                        <i class="fa-solid fa-thumbs-up"></i>
+                        <i class="fa-solid fa-thumbs-up" {{ stimulus_action('post', 'downvote', 'click') }}
+                           style="cursor: pointer;"></i>
                     {% elseif is_granted("ROLE_USER") or is_granted("ROLE_ADMIN") %}
                         <a {{ stimulus_action('post', 'upvote', 'click') }} style="cursor: pointer;">
                             <i class="fa-regular fa-thumbs-up"></i>
