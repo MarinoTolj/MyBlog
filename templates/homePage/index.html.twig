@@ -13,6 +13,12 @@
             margin-top: 20px;
         }
 
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
         .container {
             display: grid;
             grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -35,6 +41,7 @@
             color: white;
             cursor: pointer;
         }
+
     </style>
     <div class="example-wrapper">
         <div class="count">
@@ -45,6 +52,15 @@
                 <h3 class="sorted">
                     {{ knp_pagination_sortable(pagination, 'Sort', 'a.title') }}
                 </h3>
+                {{ form_start(form) }}
+                <div class="input-container">
+
+                    {{ form_label(form.title) }}
+                    {{ form_widget(form.title) }}
+                </div>
+                {{ form_widget(form.save) }}
+                {{ form_end(form) }}
+
             </div>
             <div class="navigation">
                 {{ knp_pagination_render(pagination) }}
