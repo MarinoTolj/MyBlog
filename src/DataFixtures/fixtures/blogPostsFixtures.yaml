@@ -1,5 +1,0 @@
-App\Entity\BlogPosts:
-  blogPosts_{1..50}:
-    title: <text(20)>
-    body: <text()>
-    imageFilename: <getRandomImage()>

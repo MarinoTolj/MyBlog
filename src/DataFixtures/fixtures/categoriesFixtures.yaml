@@ -1,3 +1,0 @@
-App\Entity\PostCategories:
-  categories_{1..4}:
-    name: <word()>

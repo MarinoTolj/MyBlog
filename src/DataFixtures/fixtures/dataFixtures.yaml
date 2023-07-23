@@ -1,0 +1,26 @@
+App\Entity\PostCategories:
+  categories{1..4}:
+    name: <word()>
+
+App\Entity\Users:
+  users{1..4}:
+    username: <name()>
+    email: <email()>
+    avatar: 'user_64b3e66302bd8.png'
+    roles: [ 'ROLE_USER' ]
+    password: <getPasswordHash(@self, 'Useruser123')>
+
+App\Entity\BlogPosts:
+  blogPosts{1..50}:
+    title: <text(20)>
+    body: <text()>
+    imageFilename: <getRandomImage()>
+    postCategories: '<numberBetween(1, 3)>x @categories*'
+
+
+App\Entity\Comments:
+  comments{1..200}:
+    body: <text()>
+    postId: '@blogPosts*'
+    userId: '@users*'
+

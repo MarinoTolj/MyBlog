@@ -37,11 +37,15 @@ class BlogPosts
     #[ORM\ManyToMany(targetEntity: PostCategories::class, mappedBy: 'blogPosts')]
     private Collection $postCategories;
 
+    #[ORM\OneToMany(mappedBy: 'postId', targetEntity: PostTranslations::class, orphanRemoval: true)]
+    private Collection $postTranslations;
+
     public function __construct()
     {
         $this->likedByUsers = new ArrayCollection();
         $this->favoritedByUsers = new ArrayCollection();
         $this->postCategories = new ArrayCollection();
+        $this->postTranslations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -195,6 +199,36 @@ class BlogPosts
     {
         if ($this->postCategories->removeElement($postCategory)) {
             $postCategory->removeBlogPost($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PostTranslations>
+     */
+    public function getPostTranslations(): Collection
+    {
+        return $this->postTranslations;
+    }
+
+    public function addPostTranslation(PostTranslations $postTranslation): static
+    {
+        if (!$this->postTranslations->contains($postTranslation)) {
+            $this->postTranslations->add($postTranslation);
+            $postTranslation->setPostId($this);
+        }
+
+        return $this;
+    }
+
+    public function removePostTranslation(PostTranslations $postTranslation): static
+    {
+        if ($this->postTranslations->removeElement($postTranslation)) {
+            // set the owning side to null (unless already changed)
+            if ($postTranslation->getPostId() === $this) {
+                $postTranslation->setPostId(null);
+            }
         }
 
         return $this;
