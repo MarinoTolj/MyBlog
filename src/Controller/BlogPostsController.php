@@ -232,7 +232,8 @@ class BlogPostsController extends AbstractController
         $entityManager->persist($blogPost);
         $entityManager->flush();
 
-        return $this->redirectToRoute('show_blog_post', ['id' => $blogPost->getId()]);
+        return new Response("All good");
+
     }
 
     public function unfavoriteBlogPost(Request $request, EntityManagerInterface $entityManager, int $id): Response
@@ -245,7 +246,8 @@ class BlogPostsController extends AbstractController
         $entityManager->persist($blogPost);
         $entityManager->flush();
 
-        return $this->redirectToRoute('show_blog_post', ['id' => $blogPost->getId()]);
+        return new Response("All good");
+
     }
 
     public function deleteBlogPost(EntityManagerInterface $entityManager, int $id): Response
