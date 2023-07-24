@@ -52,6 +52,7 @@ class AppFixtures extends Fixture
 
             for ($j = 0; $j < 2; $j++) {
                 $postTranslations = new PostTranslations();
+                $postTranslations->setTitle($loader->getFakerGenerator()->text(20));
                 $postTranslations->setBody($loader->getFakerGenerator()->text());
                 $postTranslations->setLocale($j % 2 === 0 ? "es" : "hr");
                 $postTranslations->setPostId($blogPosts[$i]);
