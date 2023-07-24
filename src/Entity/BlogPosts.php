@@ -41,6 +41,9 @@ class BlogPosts
     #[ORM\Column(length: 2)]
     private ?string $locale = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $slug = null;
+
     public function __construct()
     {
         $this->likedByUsers = new ArrayCollection();
@@ -213,6 +216,18 @@ class BlogPosts
     public function setLocale(string $locale): static
     {
         $this->locale = $locale;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
 
         return $this;
     }

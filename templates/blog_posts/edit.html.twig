@@ -87,10 +87,10 @@
         </div>
         {{ form_row(form.save, {'attr': {'class': 'btn'}}) }}
         {{ form_end(form) }}
-        <div {{ stimulus_controller('post', {blogPostId:blogPostId}) }}>
+        <div {{ stimulus_controller('post', {blogPostId:post.id}) }}>
             <button {{ stimulus_action('post', 'deleteBlogPost') }} class="deleteBtn">Delete This Blog Post</button>
         </div>
-        <a href="{{ path("show_blog_post", {"id":blogPostId}) }}">
+        <a href="{{ path("show_blog_post", {"slug":post.slug}) }}">
             Return to post
         </a>
     </div>

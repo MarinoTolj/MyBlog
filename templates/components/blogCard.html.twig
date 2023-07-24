@@ -68,7 +68,7 @@
             margin: 0px;
         }
     </style>
-    <a href="{{ path("show_blog_post", {'id':blogPost.id}) }}" class="blog-title"
+    <a href="{{ path("show_blog_post", {'slug':blogPost.slug, '_locale':blogPost.locale}) }}" class="blog-title"
        style="text-decoration: none;">
         <article>
             <div class="image-container">

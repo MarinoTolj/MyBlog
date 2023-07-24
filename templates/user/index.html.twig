@@ -120,10 +120,10 @@
             {% endif %}
             <h3>Your comments: </h3>
             <div class="comments-container">
-                {% for comment in app.user.comments %}
+                {% for comment in comments %}
                     <div class="comments">
                         <textarea rows="5" cols="50" disabled>{{ comment.body }}</textarea>
-                        <a href="{{ path('show_blog_post', {'id':comment.postId}) }}"
+                        <a href="{{ path('show_blog_post', {'slug':comment.slug, '_locale':comment.locale}) }}"
                            style="width: fit-content;height: fit-content;">See related post</a>
                     </div>
                 {% endfor %}

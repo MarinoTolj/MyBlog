@@ -115,7 +115,9 @@
         <div class="btn-container">
 
             <div {{ stimulus_controller('post', {
+                blogPostSlug:post.slug,
                 blogPostId:post.id
+
             }) }} class="likeBtn">
                 {% if app.user is not null %}
                     {% if post in app.user.likedPosts %}
@@ -132,6 +134,7 @@
             </div>
 
             <div {{ stimulus_controller('post', {
+                blogPostSlug:post.slug,
                 blogPostId:post.id
             }) }} class="favoriteBtn">
 
@@ -150,7 +153,7 @@
 
         {% if is_granted('ROLE_ADMIN') %}
 
-            <a href="{{ path('edit_blog_post', {'id':post.id}) }}" style="all: unset;margin: 20px 0;">
+            <a href="{{ path('edit_blog_post', {'slug':post.slug}) }}" style="all: unset;margin: 20px 0;">
                 <button>
                     Edit post
                 </button>
@@ -166,7 +169,7 @@
         {% endif %}
 
         <div class="comments-container" {{ stimulus_controller('comment', {
-            blogPostId:post.id
+            blogPostSlug:post.slug
         }) }}>
             <h3>Comments:</h3>
             <hr>

@@ -14,7 +14,7 @@ new_blog_post:
   requirements:
     _locale: en|es|hr
 show_blog_post:
-  path: /{_locale}/posts/{id}
+  path: /{_locale}/posts/{slug}
   controller: App\Controller\BlogPostsController::showBlogPost
   requirements:
     _locale: en|es|hr
@@ -36,7 +36,7 @@ unfavorite_blog_post:
   controller: App\Controller\BlogPostsController::unfavoriteBlogPost
   methods: POST
 edit_blog_post:
-  path: /{_locale}/posts/{id}/edit
+  path: /{_locale}/posts/{slug}/edit
   controller: App\Controller\BlogPostsController::editBlogPost
   requirements:
     _locale: en|es|hr

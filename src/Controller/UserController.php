@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Comments;
 use App\Entity\PostCategories;
 use App\Entity\Users;
 use App\Form\CategoryType;
@@ -29,6 +30,15 @@ class UserController extends AbstractController
         $newCategory = new PostCategories();
         $addCategoryForm = $this->createForm(CategoryType::class, $newCategory);
 
+        $qb = $entityManager->createQueryBuilder('b');
+        $qb->select('b.slug, b.locale, c.body')
+            ->from('App:BlogPosts', 'b')
+            ->setParameter('userId', $this->getUser()->getId())
+            ->innerJoin('b.comments', 'c')
+            ->where('c.userId=:userId');
+
+        $comments = $qb->getQuery()->getResult();
+
         $addCategoryForm->handleRequest($request);
 
         if ($addCategoryForm->isSubmitted() && $addCategoryForm->isValid()) {
@@ -38,7 +48,7 @@ class UserController extends AbstractController
             return $this->redirectToRoute('user_profile', ['userId' => $this->getUser()->getId()]);
         }
 
-        return $this->render('user/index.html.twig', ['categories' => $categories, 'form' => $addCategoryForm->createView()]);
+        return $this->render('user/index.html.twig', ['categories' => $categories, 'form' => $addCategoryForm->createView(), 'comments' => $comments]);
     }
 
     public function editCategory(EntityManagerInterface $entityManager, $id, Request $request): Response

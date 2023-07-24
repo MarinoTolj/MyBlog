@@ -5,6 +5,7 @@ namespace App\DataFixtures\ORM;
 use Faker\Provider\Base as BaseProvider;
 use Faker\Generator;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Cocur\Slugify\Slugify;
 
 class AppProvider extends BaseProvider
 {
@@ -31,6 +32,12 @@ class AppProvider extends BaseProvider
     {
         $locals = ["en", "es", "hr"];
         return $locals[array_rand($locals)];
+    }
+
+    public function getSlug(string $text)
+    {
+        $slugify = new Slugify();
+        return $slugify->slugify($text);
     }
 
 }

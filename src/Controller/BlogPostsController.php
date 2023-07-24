@@ -7,6 +7,7 @@ use App\Entity\Comments;
 use App\Entity\PostCategories;
 use App\Form\BlogPostType;
 use App\Form\CommentsType;
+use Cocur\Slugify\Slugify;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
@@ -23,24 +24,27 @@ class BlogPostsController extends AbstractController
      * @var Security
      */
     private $security;
+    private Slugify $slugify;
 
     public function __construct(Security $security)
     {
         $this->security = $security;
+        $this->slugify = new Slugify();
+
     }
 
-    public function editBlogPost(EntityManagerInterface $entityManager, Request $request, SluggerInterface $slugger, int $id): Response
+    public function editBlogPost(EntityManagerInterface $entityManager, Request $request, SluggerInterface $slugger, string $slug): Response
     {
 
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         $locale = $request->getLocale();
-        $currentBlogPost = $entityManager->getRepository(BlogPosts::class)->findOneBy(['id' => $id, 'locale' => $locale]);
+        $currentBlogPost = $entityManager->getRepository(BlogPosts::class)->findOneBy(['slug' => $slug, 'locale' => $locale]);
 
 
         if (!$currentBlogPost) {
             throw $this->createNotFoundException(
-                'No product found for id ' . $id
+                'No product found for slug ' . $slug
             );
         }
 
@@ -83,13 +87,18 @@ class BlogPostsController extends AbstractController
                 $category = $entityManager->getRepository(PostCategories::class)->findBy(['name' => $value]);
                 $currentBlogPost->addPostCategory($category[0]);
             }
+
             $currentBlogPost->setImageFilename($newFilename);
+
             $locale = $editForm->get("locale")->getData();
             $currentBlogPost->setLocale($locale);
 
+            $currentBlogPost->setSlug($this->slugify->slugify($editForm->get('title')->getData()));
+
+
             $entityManager->persist($currentBlogPost);
             $entityManager->flush();
-            return $this->redirectToRoute('show_blog_post', ['id' => $currentBlogPost->getId(), '_locale' => $locale]);
+            return $this->redirectToRoute('show_blog_post', ['slug' => $currentBlogPost->getSlug(), '_locale' => $locale]);
         }
 
         $response = new Response(null, $editForm->isSubmitted() ? 422 : 200);
@@ -97,23 +106,23 @@ class BlogPostsController extends AbstractController
 
         return $this->render("blog_posts/edit.html.twig", [
             'form' => $editForm->createView(),
-            'blogPostId' => $currentBlogPost->getId(),
+            'post' => $currentBlogPost,
         ], $response);
     }
 
 
-    public function showBlogPost(Request $request, EntityManagerInterface $entityManager, int $id): Response
+    public function showBlogPost(Request $request, EntityManagerInterface $entityManager, string $slug): Response
     {
-        $comments = $entityManager->getRepository(Comments::class)->findBy(['postId' => $id]);
 
         $locale = $request->getLocale();
-        $blogPost = $entityManager->getRepository(BlogPosts::class)->findOneBy(['id' => $id, 'locale' => $locale]);
+        $blogPost = $entityManager->getRepository(BlogPosts::class)->findOneBy(['slug' => $slug, 'locale' => $locale]);
 
         if (!$blogPost) {
             throw $this->createNotFoundException(
-                'No product found for id ' . $id
+                'No product found for slug ' . $slug
             );
         }
+        $comments = $entityManager->getRepository(Comments::class)->findBy(['postId' => $blogPost->getId()]);
 
         $newComment = new Comments();
 
@@ -130,7 +139,7 @@ class BlogPostsController extends AbstractController
             $entityManager->persist($newComment);
             $entityManager->flush();
 
-            return $this->redirectToRoute('show_blog_post', ['id' => $id]);
+            return $this->redirectToRoute('show_blog_post', ['slug' => $slug]);
 
         }
 
@@ -178,11 +187,12 @@ class BlogPostsController extends AbstractController
                 $category = $entityManager->getRepository(PostCategories::class)->findBy(['name' => $value]);
                 $blogPost->addPostCategory($category[0]);
             }
+            $blogPost->setSlug($this->slugify->slugify($form->get('title')->getData()));
 
             $entityManager->persist($blogPost);
             $entityManager->flush();
 
-            return $this->redirectToRoute("show_blog_post", ['id' => $blogPost->getId()]);
+            return $this->redirectToRoute("show_blog_post", ['slug' => $blogPost->getSlug()]);
         }
 
         $response = new Response(null, $form->isSubmitted() ? 422 : 200);
@@ -254,14 +264,14 @@ class BlogPostsController extends AbstractController
     {
 
 
-        $currentBlogPost = $entityManager->getRepository(BlogPosts::class)->findBy(['id' => $id]);
+        $currentBlogPost = $entityManager->getRepository(BlogPosts::class)->find($id);
 
         if (!$currentBlogPost) {
             throw $this->createNotFoundException(
                 'No post found for id:' . $id
             );
         }
-        $currentBlogPost = $currentBlogPost[0];
+
 
         $blogPostComments = $entityManager->getRepository(Comments::class)->findBy(['postId' => $currentBlogPost->getId()]);
         //when deleting blog post make sure all of it comments are first deleted because they share a relationship
