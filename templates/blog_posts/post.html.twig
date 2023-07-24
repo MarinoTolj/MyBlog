@@ -96,6 +96,7 @@
             cursor: pointer;
             width: 20%;
             margin: 0 auto;
+            margin-top: 10px;
         }
 
 
@@ -108,7 +109,7 @@
 
         <article>
 
-            {{ post.body }}
+            {{ post.body|raw }}
 
         </article>
 

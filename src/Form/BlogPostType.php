@@ -5,6 +5,7 @@ namespace App\Form;
 
 use App\Entity\PostCategories;
 use Doctrine\ORM\EntityManager;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -32,7 +33,7 @@ class BlogPostType extends AbstractType
 
         $builder
             ->add('title', TextType::class, ['label' => 'Title', 'label_format' => '%name%', 'constraints' => [new Length(['min' => 5, 'max' => 40])]])
-            ->add('body', TextareaType::class, ['label' => 'Body', 'label_format' => '%name%', 'constraints' => [new Length(['min' => 5, 'max' => 500])]])
+            ->add('body', CKEditorType::class, ['label' => 'Body', 'label_format' => '%name%', 'constraints' => [new Length(['min' => 5, 'max' => 500])]])
             ->add('locale', ChoiceType::class, [
                 'choices' => ['en' => 'en', 'es' => 'es', 'hr' => 'hr'],
                 'expanded' => true,
