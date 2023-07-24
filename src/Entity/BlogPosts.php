@@ -37,8 +37,9 @@ class BlogPosts
     #[ORM\ManyToMany(targetEntity: PostCategories::class, mappedBy: 'blogPosts')]
     private Collection $postCategories;
 
-    #[ORM\OneToMany(mappedBy: 'postId', targetEntity: PostTranslations::class, orphanRemoval: true)]
-    private Collection $postTranslations;
+
+    #[ORM\Column(length: 2)]
+    private ?string $locale = null;
 
     public function __construct()
     {
@@ -204,32 +205,14 @@ class BlogPosts
         return $this;
     }
 
-    /**
-     * @return Collection<int, PostTranslations>
-     */
-    public function getPostTranslations(): Collection
+    public function getLocale(): ?string
     {
-        return $this->postTranslations;
+        return $this->locale;
     }
 
-    public function addPostTranslation(PostTranslations $postTranslation): static
+    public function setLocale(string $locale): static
     {
-        if (!$this->postTranslations->contains($postTranslation)) {
-            $this->postTranslations->add($postTranslation);
-            $postTranslation->setPostId($this);
-        }
-
-        return $this;
-    }
-
-    public function removePostTranslation(PostTranslations $postTranslation): static
-    {
-        if ($this->postTranslations->removeElement($postTranslation)) {
-            // set the owning side to null (unless already changed)
-            if ($postTranslation->getPostId() === $this) {
-                $postTranslation->setPostId(null);
-            }
-        }
+        $this->locale = $locale;
 
         return $this;
     }

@@ -16,25 +16,25 @@ class HomePageController extends AbstractController
 {
     public function index(EntityManagerInterface $entityManager, PaginatorInterface $paginator, Request $request): Response
     {
-        $blogPosts = $entityManager->getRepository(BlogPosts::class)->findAll();
         $filterData = "";
         $filterForm = $this->createForm(FilterType::class);
         $filterForm->handleRequest($request);
+        $locale = $request->getLocale();
 
         if ($filterForm->isSubmitted() && $filterForm->isValid()) {
             $filterData = $filterForm->get('title')->getData();
-
         }
         $response = new Response(null, $filterForm->isSubmitted() ? 422 : 200);
 
         $qb = $entityManager->createQueryBuilder('a');
+
         $qb->select("a")
             ->from("App:BlogPosts", "a")
-            ->setParameter('filterData', '%' . $filterData . '%')
-            ->where($qb->expr()->like('a.title', ':filterData'));
+            ->setParameters(array('locale' => $locale, 'filterData' => '%' . $filterData . '%'))
+            ->where("a.locale = :locale")
+            ->andWhere($qb->expr()->like('a.title', ':filterData'));
 
         $query = $qb->getQuery();
-
 
         //paginate query with KnpPaginator
         $pagination = $paginator->paginate(
@@ -43,8 +43,8 @@ class HomePageController extends AbstractController
             10 /*limit per page*/
         );
 
+
         return $this->render('homePage/index.html.twig', [
-            'blogPosts' => $blogPosts,
             'pagination' => $pagination,
             'form' => $filterForm->createView()
         ], $response);

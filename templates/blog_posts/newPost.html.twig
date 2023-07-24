@@ -63,6 +63,10 @@
             {{ form_errors(form.body, {'attrs':{'class':'error'}}) }}
         </div>
         <div class="input-container">
+            {{ form_label(form.locale) }}
+            {{ form_widget(form.locale) }}
+        </div>
+        <div class="input-container">
             {{ form_label(form.categories) }}
             {{ form_widget(form.categories) }}
             {{ form_errors(form.categories) }}

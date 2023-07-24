@@ -34,26 +34,29 @@ class BlogPostsController extends AbstractController
 
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
-        $currentBlogPost = $entityManager->getRepository(BlogPosts::class)->findBy(['id' => $id]);
+        $locale = $request->getLocale();
+        $currentBlogPost = $entityManager->getRepository(BlogPosts::class)->findOneBy(['id' => $id, 'locale' => $locale]);
+
 
         if (!$currentBlogPost) {
             throw $this->createNotFoundException(
                 'No product found for id ' . $id
             );
         }
-        $currentBlogPost = $currentBlogPost[0];
+
         $newFilename = $currentBlogPost->getImageFilename();
 
         $editForm = $this->createForm(BlogPostType::class, $currentBlogPost, [
             'entity_manager' => $entityManager,
         ]);
+        $editForm->get('locale')->setData($locale);
 
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $imageFile = $editForm->get("imageFilename")->getData();
-            //if admin chose new image file, upload it and delete old one
 
+            //if admin chose new image file, upload it and delete old one
             if ($imageFile) {
 
                 $filesystem = new Filesystem();
@@ -81,10 +84,12 @@ class BlogPostsController extends AbstractController
                 $currentBlogPost->addPostCategory($category[0]);
             }
             $currentBlogPost->setImageFilename($newFilename);
+            $locale = $editForm->get("locale")->getData();
+            $currentBlogPost->setLocale($locale);
 
             $entityManager->persist($currentBlogPost);
             $entityManager->flush();
-            return $this->redirectToRoute('show_blog_post', ['id' => $currentBlogPost->getId()]);
+            return $this->redirectToRoute('show_blog_post', ['id' => $currentBlogPost->getId(), '_locale' => $locale]);
         }
 
         $response = new Response(null, $editForm->isSubmitted() ? 422 : 200);
@@ -99,8 +104,16 @@ class BlogPostsController extends AbstractController
 
     public function showBlogPost(Request $request, EntityManagerInterface $entityManager, int $id): Response
     {
-        $blogPost = $entityManager->getRepository(BlogPosts::class)->find($id);
         $comments = $entityManager->getRepository(Comments::class)->findBy(['postId' => $id]);
+
+        $locale = $request->getLocale();
+        $blogPost = $entityManager->getRepository(BlogPosts::class)->findOneBy(['id' => $id, 'locale' => $locale]);
+
+        if (!$blogPost) {
+            throw $this->createNotFoundException(
+                'No product found for id ' . $id
+            );
+        }
 
         $newComment = new Comments();
 
@@ -109,11 +122,7 @@ class BlogPostsController extends AbstractController
 
         $user = $this->getUser();
 
-        if (!$blogPost) {
-            throw $this->createNotFoundException(
-                'No product found for id ' . $id
-            );
-        }
+
         if ($form->isSubmitted() && $form->isValid()) {
             $newComment->setPostId($blogPost);
             $newComment->setUserId($user);
@@ -162,8 +171,9 @@ class BlogPostsController extends AbstractController
                 }
             }
             $categories = $form->get("categories")->getData();
+            $locale = $form->get("locale")->getData();
             $blogPost->setImageFilename($newFilename);
-
+            $blogPost->setLocale($locale);
             foreach ($categories as $key => $value) {
                 $category = $entityManager->getRepository(PostCategories::class)->findBy(['name' => $value]);
                 $blogPost->addPostCategory($category[0]);
@@ -186,7 +196,6 @@ class BlogPostsController extends AbstractController
 
     public function upvoteBlogPost(Request $request, EntityManagerInterface $entityManager, int $id): Response
     {
-
 
         $blogPost = $entityManager->getRepository(BlogPosts::class)->find($id);
         $user = $this->security->getUser();

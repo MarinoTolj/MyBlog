@@ -38,27 +38,11 @@ class AppFixtures extends Fixture
         $admin->setPassword($password);
         $admin->setAvatar("man_64b3e66cc7a49.png");
         $manager->persist($admin);
-        $blogPosts = [];
 
         foreach ($databaseData as $data) {
-            if ($data instanceof BlogPosts) {
-                array_push($blogPosts, $data);
-            }
-
             $manager->persist($data);
         }
 
-        for ($i = 0; $i < count($blogPosts); $i++) {
-
-            for ($j = 0; $j < 2; $j++) {
-                $postTranslations = new PostTranslations();
-                $postTranslations->setTitle($loader->getFakerGenerator()->text(20));
-                $postTranslations->setBody($loader->getFakerGenerator()->text());
-                $postTranslations->setLocale($j % 2 === 0 ? "es" : "hr");
-                $postTranslations->setPostId($blogPosts[$i]);
-                $manager->persist($postTranslations);
-            }
-        }
 
         $manager->flush();
     }

@@ -27,4 +27,10 @@ class AppProvider extends BaseProvider
         return $this->hasher->hashPassword($user, $password);
     }
 
+    public function getRandomLocale()
+    {
+        $locals = ["en", "es", "hr"];
+        return $locals[array_rand($locals)];
+    }
+
 }

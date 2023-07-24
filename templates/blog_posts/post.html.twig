@@ -101,12 +101,15 @@
 
     </style>
     <div class="container">
+
         <h2>{{ post.title }}</h2>
 
         <img src="{{ asset('uploads/images/' ~ post.imageFilename) }}" alt="Blog post image">
 
         <article>
+
             {{ post.body }}
+
         </article>
 
         <div class="btn-container">
@@ -119,9 +122,8 @@
                         <i class="fa-solid fa-thumbs-up" {{ stimulus_action('post', 'downvote', 'click') }}
                            style="cursor: pointer;"></i>
                     {% elseif is_granted("ROLE_USER") or is_granted("ROLE_ADMIN") %}
-                        <a {{ stimulus_action('post', 'upvote', 'click') }} style="cursor: pointer;">
-                            <i class="fa-regular fa-thumbs-up"></i>
-                        </a>
+                        <i class="fa-regular fa-thumbs-up" {{ stimulus_action('post', 'upvote', 'click') }}
+                           style="cursor: pointer;"></i>
                     {% endif %}
                     <p>{{ post.likedByUsers|length }}</p>
                 {% else %}
