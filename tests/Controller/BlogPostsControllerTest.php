@@ -19,6 +19,7 @@ class BlogPostsControllerTest extends WebTestCase
         $formData = [
             'title' => 'TestTitle',
             'body' => 'Test Body',
+            'locale' => 'en',
             'imageFilename' => 'path\to\imageFile.png'
         ];
 

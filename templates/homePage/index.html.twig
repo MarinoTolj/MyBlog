@@ -15,8 +15,8 @@
 
         .input-container {
             display: flex;
-            flex-direction: column;
             margin-bottom: 20px;
+            position: relative;
         }
 
         .container {
@@ -42,6 +42,19 @@
             cursor: pointer;
         }
 
+        #filter_save {
+            all: unset;
+            position: absolute;
+            bottom: 0;
+            right: -70px;
+            border-radius: 5px;
+            background-color: #059862;
+            padding: 6px 9px;
+            font-size: 20px;
+            color: white;
+            cursor: pointer;
+        }
+
     </style>
     <div class="example-wrapper">
         <div class="count">
@@ -49,19 +62,20 @@
                 Total posts: {{ pagination.getTotalItemCount }}
             </h3>
             <div>
-                <h3 class="sorted">
-                    {{ knp_pagination_sortable(pagination, 'Sort', 'a.title') }}
-                </h3>
                 {{ form_start(form) }}
                 <div class="input-container">
-
-                    {{ form_label(form.title) }}
-                    {{ form_widget(form.title) }}
+                    <div style="display: flex;flex-direction: column;">
+                        {{ form_label(form.title) }}
+                        {{ form_widget(form.title) }}
+                    </div>
+                    {{ form_widget(form.save) }}
+                    
                 </div>
-                {{ form_widget(form.save) }}
                 {{ form_end(form) }}
-
             </div>
+            <h3 class="sorted">
+                {{ knp_pagination_sortable(pagination, 'Sort', 'a.title') }}
+            </h3>
             <div class="navigation">
                 {{ knp_pagination_render(pagination) }}
             </div>

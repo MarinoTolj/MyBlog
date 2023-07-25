@@ -51,7 +51,6 @@
 
         .post-categories {
             display: flex;
-            flex-direction: column;
             align-items: center;
             gap: 10px;
         }
@@ -71,13 +70,25 @@
             grid-template-columns: repeat(1, minmax(0, 1fr));
             column-gap: 2rem;
             row-gap: 8rem;
-
         }
 
         .comments-container {
-            width: 75%;
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+            column-gap: 5rem;
+            row-gap: 4rem;
+        }
+
+        @media (min-width: 768px) {
+            .comments-container {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (min-width: 1280px) {
+            .comments-container {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
         }
 
         form {
@@ -98,7 +109,7 @@
                 <a href="{{ path("edit_user_profile", {'userId':app.user.id}) }}">Edit profile</a>
             </div>
             {% if is_granted("ROLE_ADMIN") %}
-                <div style="max-width: 60%;margin-top: 20px;">
+                <div style="max-width: 20%;margin-top: 20px;">
                     {{ form_start(form) }}
                     <div class="input-container">
                         {{ form_label(form.name) }}
@@ -107,8 +118,8 @@
                     </div>
                     {{ form_end(form) }}
 
+                    <p>Click to edit post categories here</p>
                     <div class="post-categories">
-                        <p>Click to edit post categories here</p>
                         {% for category in categories %}
                             <a href="{{ path('edit_category', {'id':category.id}) }}"
                                class="category">{{ category.name }}</a>
@@ -118,19 +129,21 @@
 
 
             {% endif %}
-            <h3>Your comments: </h3>
-            <div class="comments-container">
-                {% for comment in comments %}
-                    <div class="comments">
-                        <textarea rows="5" cols="50" disabled>{{ comment.body }}</textarea>
-                        <a href="{{ path('show_blog_post', {'slug':comment.slug, '_locale':comment.locale}) }}"
-                           style="width: fit-content;height: fit-content;">See related post</a>
-                    </div>
-                {% endfor %}
+            <div style="width: 75%;margin: 0 auto;">
+                <h3 style="width: fit-content;">Your comments: </h3>
+                <div class="comments-container">
+                    {% for comment in comments %}
+                        <div class="comments">
+                            <textarea rows="5" cols="50" disabled>{{ comment.body }}</textarea>
+                            <a href="{{ path('show_blog_post', {'slug':comment.slug, '_locale':comment.locale}) }}"
+                               style="width: fit-content;height: fit-content;">See related post</a>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
 
             <div>
-                <h3>Your liked posts</h3>
+                <h3>Your liked posts: </h3>
                 <div class="container">
                     {% for blogPost in app.user.likedPosts %}
                         {% include 'components/blogCard.html.twig' with {'blogPost':blogPost} %}
@@ -138,7 +151,7 @@
                 </div>
             </div>
             <div>
-                <h3>Your favorite posts</h3>
+                <h3>Your favorite posts: </h3>
                 <div class="container">
                     {% for blogPost in app.user.favoritePosts %}
                         {% include 'components/blogCard.html.twig' with {'blogPost':blogPost} %}

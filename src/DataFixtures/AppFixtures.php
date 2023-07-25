@@ -30,19 +30,10 @@ class AppFixtures extends Fixture
     {
         $loader = new AppNativeLoader($this->hasher, $this->generator);
         $databaseData = $loader->loadFile(__DIR__ . '/fixtures/dataFixtures.yaml')->getObjects();
-        $admin = new Users();
-        $admin->setUsername("Admin");
-        $admin->setRoles(["ROLE_ADMIN"]);
-        $admin->setEmail("admin@admin");
-        $password = $this->hasher->hashPassword($admin, "Adminadmin1");
-        $admin->setPassword($password);
-        $admin->setAvatar("man_64b3e66cc7a49.png");
-        $manager->persist($admin);
 
         foreach ($databaseData as $data) {
             $manager->persist($data);
         }
-
 
         $manager->flush();
     }

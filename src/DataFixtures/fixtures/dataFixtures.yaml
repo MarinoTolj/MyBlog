@@ -3,15 +3,26 @@ App\Entity\PostCategories:
     name: <word()>
 
 App\Entity\Users:
-  users{1..4}:
+  users{1..10}:
     username: <name()>
     email: <email()>
     avatar: 'user_64b3e66302bd8.png'
     roles: [ 'ROLE_USER' ]
     password: <getPasswordHash(@self, 'Useruser123')>
+    likedPosts: '<numberBetween(2, 5)>x @blogPosts*'
+    favoritePosts: '<numberBetween(2, 5)>x @blogPosts*'
+  users:
+    username: 'Admin'
+    email: 'admin@admin'
+    avatar: 'man_64b3e66cc7a49.png'
+    roles: [ 'ROLE_ADMIN' ]
+    password: <getPasswordHash(@self, 'Adminadmin1')>
+    likedPosts: '<numberBetween(2, 5)>x @blogPosts*'
+    favoritePosts: '<numberBetween(2, 5)>x @blogPosts*'
+
 
 App\Entity\BlogPosts:
-  blogPosts{1..50}:
+  blogPosts{1..100}:
     title: <text(20)>
     body: <text()>
     imageFilename: <getRandomImage()>
@@ -21,7 +32,7 @@ App\Entity\BlogPosts:
 
 
 App\Entity\Comments:
-  comments{1..200}:
+  comments{1..50}:
     body: <text()>
     postId: '@blogPosts*'
     userId: '@users*'
