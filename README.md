@@ -18,6 +18,9 @@ Position yourself in project directory and then proceed to run provided commands
 cd MyBlog
 ```
 
+Before you continue you should create .env file with database url.\
+For example (for Mysql): DATABASE_URL="mysql://root:root@127.0.0.1:3306/blog_post"
+
 Install the project's dependencies into vendor
 
 ```shell
@@ -46,6 +49,12 @@ Seed database
 
 ```shell
 php .\bin\console doctrine:fixtures:load
+```
+
+Install CKEditor in web directory
+
+```shell
+php bin/console assets:install public
 ```
 
 Build javascript files
