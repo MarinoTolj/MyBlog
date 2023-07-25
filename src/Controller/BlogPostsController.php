@@ -192,7 +192,7 @@ class BlogPostsController extends AbstractController
             $entityManager->persist($blogPost);
             $entityManager->flush();
 
-            return $this->redirectToRoute("show_blog_post", ['slug' => $blogPost->getSlug()]);
+            return $this->redirectToRoute("show_blog_post", ['slug' => $blogPost->getSlug(), '_locale' => $locale]);
         }
 
         $response = new Response(null, $form->isSubmitted() ? 422 : 200);

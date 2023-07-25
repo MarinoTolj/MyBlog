@@ -34,7 +34,7 @@ class RegistrationController extends AbstractController
 
             $user->setPassword($this->passwordHasher->hashPassword($user, $userData->getPassword()));
             $user->setRoles(["ROLE_USER"]);
-            $user->setAvatar("user_64b3e66302bd8.png");
+            $user->setAvatar("UserAvatar.png");
 
             $entityManager->persist($user);
             $entityManager->flush();

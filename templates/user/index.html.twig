@@ -16,11 +16,11 @@
             justify-content: center;
         }
 
-        .comments {
+        .comment {
             display: flex;
-            gap: 15px;
+            flex-direction: column;
             margin: 20px;
-            flex-basis: 20%;
+
         }
 
         .avatar {
@@ -129,14 +129,14 @@
 
 
             {% endif %}
-            <div style="width: 75%;margin: 0 auto;">
+            <div style="width: 91%;margin: 0 auto;">
                 <h3 style="width: fit-content;">Your comments: </h3>
                 <div class="comments-container">
                     {% for comment in comments %}
-                        <div class="comments">
-                            <textarea rows="5" cols="50" disabled>{{ comment.body }}</textarea>
+                        <div class="comment">
+                            <textarea rows="4" cols="50" disabled>{{ comment.body }}</textarea>
                             <a href="{{ path('show_blog_post', {'slug':comment.slug, '_locale':comment.locale}) }}"
-                               style="width: fit-content;height: fit-content;">See related post</a>
+                               class="btn" style="font-size: 15px;">See related post</a>
                         </div>
                     {% endfor %}
                 </div>
