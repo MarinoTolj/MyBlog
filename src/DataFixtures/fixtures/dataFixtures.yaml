@@ -32,7 +32,7 @@ App\Entity\BlogPosts:
 
 
 App\Entity\Comments:
-  comments{1..50}:
+  comments{1..75}:
     body: <text()>
     postId: '@blogPosts*'
     userId: '@users*'

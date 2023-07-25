@@ -18,8 +18,11 @@ Position yourself in project directory and then proceed to run provided commands
 cd MyBlog
 ```
 
-Before you continue you should create .env file with database url.\
-For example (for Mysql): DATABASE_URL="mysql://root:root@127.0.0.1:3306/blog_post"
+Before you continue you should create .env file with database url, environment and app_secret.\
+For example:\
+APP_ENV=dev\
+APP_SECRET=ab5A17628A2441Da79256755dgga5d9\
+DATABASE_URL="mysql://root:root@127.0.0.1:3306/blog_post"
 
 Install the project's dependencies into vendor
 
